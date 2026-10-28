@@ -1,0 +1,46 @@
+game: fgo
+server: JP          # only JP-server Japanese voice
+rate_limit_sec: 1.0 # per host, minimum
+host_rate_limit_sec:
+  fgo.wiki: 1.5
+  media.fgo.wiki: 1.0
+
+atlas:
+  servants_export: https://api.atlasacademy.io/export/JP/nice_servant_lore.json
+  names_en_export: https://api.atlasacademy.io/export/JP/basic_servant_lang_en.json
+  # Atlas servant types that are playable servants (excludes enemies, Beast, etc.)
+  servant_types: [normal, heroine]
+
+mooncell:
+  api: https://fgo.wiki/api.php
+  voice_page_suffix: /语音
+  servant_query: "[[序号::+]][[分类:从者]]"
+
+# Mooncell voice-table section (表格标题) -> category_norm.
+# Rules are tried in order; first prefix match wins. Title-level rules override section rules.
+category_rules:
+  section:
+    - {prefix: 战斗, norm: battle}
+    - {prefix: 召唤和强化, norm: system}
+    - {prefix: 个人空间, norm: daily}
+    - {prefix: 灵衣, norm: daily}       # costume sections: per-title rules still apply
+  title:
+    - {prefix: 牵绊, norm: bond}
+    - {prefix: 开始, norm: battle}
+    - {prefix: 技能, norm: battle}
+    - {prefix: 指令卡, norm: battle}
+    - {prefix: 宝具卡, norm: battle}
+    - {prefix: 攻击, norm: battle}
+    - {prefix: Extra, norm: battle}
+    - {prefix: 宝具, norm: battle}
+    - {prefix: 受击, norm: battle}
+    - {prefix: 无法战斗, norm: battle}
+    - {prefix: 胜利, norm: battle}
+    - {prefix: 召唤, norm: system}
+    - {prefix: 升级, norm: system}
+    - {prefix: 灵基再临, norm: system}
+    - {prefix: 灵衣开放, norm: system}
+  default: other      # event sections, 御主任务, etc.
+
+# battle lines with these title prefixes are short shouts -> exclude (kept in manifest)
+battle_shout_titles: [攻击, 受击, 指令卡, Extra]

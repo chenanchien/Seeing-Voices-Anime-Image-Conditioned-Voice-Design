@@ -1,0 +1,14 @@
+# raw media and processed audio never go to git
+data/
+*.mp3
+*.wav
+*.ogg
+*.png
+*.jpg
+*.webp
+
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.cache/

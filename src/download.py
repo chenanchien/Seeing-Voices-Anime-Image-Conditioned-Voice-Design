@@ -1,0 +1,104 @@
+"""Shared resumable downloader.
+
+Reads the per-game manifests, collects every (url, path, sha1?) item, and fetches the
+missing ones. Hosts are processed in parallel (one worker per host), but each host is
+rate-limited by PoliteSession. Existing files with a matching checksum are skipped, so
+the run can be interrupted and restarted at any time.
+
+    python -m src.download fgo [--limit-chars 3] [--only audio|image]
+"""
+from __future__ import annotations
+
+import argparse
+import logging
+import os
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+from urllib.parse import urlsplit
+
+from src.common.http import PoliteSession, RobotsDisallowed
+from src.common.io import ROOT, file_hash, load_config, read_jsonl
+
+log = logging.getLogger("download")
+
+
+def collect_items(game: str, limit_chars: int | None, only: str | None) -> list[dict]:
+    chars = list(read_jsonl(ROOT / "manifests" / f"{game}_characters.jsonl"))
+    if limit_chars:
+        chars = chars[:limit_chars]
+    keep = {c["char_uid"] for c in chars}
+    items = []
+    if only in (None, "image"):
+        for c in chars:
+            for img in c["images"]:
+                items.append({"url": img["source_url"], "path": img["path"], "sha1": None})
+    if only in (None, "audio"):
+        for clip in read_jsonl(ROOT / "manifests" / f"{game}_clips.jsonl"):
+            if clip["char_uid"] in keep and clip.get("audio_url"):
+                items.append({"url": clip["audio_url"], "path": clip["audio_path"],
+                              "sha1": clip.get("source_sha1")})
+    seen, uniq = set(), []
+    for it in items:
+        if it["path"] not in seen:
+            seen.add(it["path"])
+            uniq.append(it)
+    return uniq
+
+
+def fetch_one(sess: PoliteSession, item: dict) -> str:
+    dest = ROOT / item["path"]
+    if dest.exists() and dest.stat().st_size > 0:
+        if not item["sha1"] or file_hash(dest) == item["sha1"]:
+            return "skipped"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        r = sess.get(item["url"], stream=True)
+    except RobotsDisallowed:
+        return "robots"
+    except Exception as e:  # 404 etc. are recorded, not fatal
+        log.warning("failed %s: %s", item["url"], e)
+        return "failed"
+    tmp = dest.with_suffix(dest.suffix + ".part")
+    with open(tmp, "wb") as f:
+        for chunk in r.iter_content(1 << 16):
+            f.write(chunk)
+    if item["sha1"] and file_hash(tmp) != item["sha1"]:
+        log.warning("checksum mismatch %s", item["url"])
+        tmp.unlink()
+        return "bad_checksum"
+    os.replace(tmp, dest)
+    return "ok"
+
+
+def run(game: str, limit_chars: int | None = None, only: str | None = None) -> dict:
+    cfg = load_config(game)
+    sess = PoliteSession(min_interval=cfg.get("rate_limit_sec", 1.0),
+                         host_intervals=cfg.get("host_rate_limit_sec", {}))
+    by_host: dict[str, list[dict]] = defaultdict(list)
+    for it in collect_items(game, limit_chars, only):
+        by_host[urlsplit(it["url"]).netloc].append(it)
+
+    def worker(host: str) -> dict:
+        stats: dict[str, int] = defaultdict(int)
+        items = by_host[host]
+        for i, it in enumerate(items, 1):
+            stats[fetch_one(sess, it)] += 1
+            if i % 200 == 0 or i == len(items):
+                log.info("%s: %d/%d %s", host, i, len(items), dict(stats))
+        return dict(stats)
+
+    with ThreadPoolExecutor(max_workers=max(1, len(by_host))) as ex:
+        results = dict(zip(by_host, ex.map(worker, by_host)))
+    log.info("done: %s", results)
+    return results
+
+
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("game")
+    ap.add_argument("--limit-chars", type=int)
+    ap.add_argument("--only", choices=["audio", "image"])
+    a = ap.parse_args()
+    run(a.game, a.limit_chars, a.only)
