@@ -57,7 +57,11 @@ def per_char_distribution(chars: list[dict], clips: list[dict]) -> str:
 def exclude_reasons(clips: list[dict]) -> str:
     c = Counter(r for clip in clips for r in clip.get("exclude_reasons", []))
     only = Counter(clip["exclude_reasons"][0] for clip in clips if len(clip.get("exclude_reasons", [])) == 1)
-    return table(["reason", "clips flagged", "sole reason"], [[r, n, only[r]] for r, n in c.most_common()])
+    dur = Counter(clip.get("duration_flag") for clip in clips if clip.get("duration_flag"))
+    note = (f"\n\nDuration flags (not excluded): short (<1 s) {dur['short']}, long (>15 s) {dur['long']}; "
+            f"of these, usable: short {sum(1 for c in clips if c.get('duration_flag') == 'short' and not c['exclude'])}, "
+            f"long {sum(1 for c in clips if c.get('duration_flag') == 'long' and not c['exclude'])}.")
+    return table(["reason", "clips flagged", "sole reason"], [[r, n, only[r]] for r, n in c.most_common()]) + note
 
 
 def missing_fields(chars: list[dict], clips: list[dict]) -> str:

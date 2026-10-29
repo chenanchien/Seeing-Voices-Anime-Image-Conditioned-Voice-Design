@@ -16,6 +16,7 @@ from src.common.io import ROOT, read_jsonl, write_jsonl
 
 log = logging.getLogger("clean.finalize")
 
+# duration is only flagged (duration_flag), never excluded: the owner keeps all lengths for now
 MIN_SEC, MAX_SEC = 1.0, 15.0
 LANG_MIN_PROB = 0.5  # only exclude as non-Japanese when Whisper is reasonably sure
 LANG_MIN_SEC = 2.0   # Whisper language ID is unreliable on short interjections
@@ -49,6 +50,7 @@ def run(game: str) -> None:
         for k in QUALITY_FIELDS:
             clip[k] = st.get(k)
         reasons = []
+        clip["duration_flag"] = None
         if not clip.get("audio_url"):
             reasons.append("no_audio_source")
         elif not st:
@@ -56,10 +58,8 @@ def run(game: str) -> None:
         elif "error" in st:
             reasons.append("decode_error")
         else:
-            if st["duration_sec"] < MIN_SEC:
-                reasons.append("too_short")
-            if st["duration_sec"] > MAX_SEC:
-                reasons.append("too_long")
+            d = st["duration_sec"]
+            clip["duration_flag"] = "short" if d < MIN_SEC else "long" if d > MAX_SEC else None
             dup_of = seen_sha1.setdefault(st["audio_sha1"], uid)
             clip["duplicate_of"] = dup_of if dup_of != uid else None
             if clip["duplicate_of"]:
