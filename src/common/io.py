@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import contextlib
+import fcntl
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Iterable, Iterator
@@ -14,6 +17,22 @@ ROOT = Path(__file__).resolve().parents[2]
 def load_config(game: str) -> dict:
     with open(ROOT / "configs" / f"{game}.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+@contextlib.contextmanager
+def heavy_step(name: str):
+    """Machine-wide lock for CPU/GPU-heavy steps (audio cleaning, Whisper). Running several at
+    once froze the M1 (watchdog panic, 2026-10-29), so games wait their turn here."""
+    lock = ROOT / "data" / ".heavy_step.lock"
+    lock.parent.mkdir(parents=True, exist_ok=True)
+    with open(lock, "w") as f:
+        logging.getLogger("io").info("%s: waiting for heavy-step lock", name)
+        fcntl.flock(f, fcntl.LOCK_EX)
+        logging.getLogger("io").info("%s: got heavy-step lock", name)
+        try:
+            yield
+        finally:
+            fcntl.flock(f, fcntl.LOCK_UN)
 
 
 def read_jsonl(path: str | Path) -> Iterator[dict]:

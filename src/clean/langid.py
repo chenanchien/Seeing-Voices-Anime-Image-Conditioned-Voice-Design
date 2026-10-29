@@ -17,7 +17,7 @@ import soundfile as sf
 
 from src.clean.audio import stats_path
 from src.clean.finalize import needs_asr
-from src.common.io import ROOT, read_jsonl
+from src.common.io import ROOT, heavy_step, read_jsonl
 
 log = logging.getLogger("clean.langid")
 MODEL = "small"
@@ -58,6 +58,11 @@ class FasterWhisper:
 
 
 def run(game: str, backend: str | None = None, batch: int = 16) -> None:
+    with heavy_step(f"langid {game}"):
+        _run(game, backend, batch)
+
+
+def _run(game: str, backend: str | None, batch: int) -> None:
     backend = backend or ("mlx" if platform.machine() == "arm64" and platform.system() == "Darwin" else "faster")
     out_path = ROOT / "data" / "processed" / game / "langid.jsonl"
     clips_by_uid = {c["clip_uid"]: c for c in read_jsonl(ROOT / "manifests" / f"{game}_clips.jsonl")}

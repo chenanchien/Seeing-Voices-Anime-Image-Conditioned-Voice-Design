@@ -20,7 +20,7 @@ import pyloudnorm as pyln
 import soundfile as sf
 import soxr
 
-from src.common.io import ROOT, file_hash, read_jsonl
+from src.common.io import ROOT, file_hash, heavy_step, read_jsonl
 
 log = logging.getLogger("clean.audio")
 
@@ -93,7 +93,12 @@ def stats_path(game: str) -> Path:
     return ROOT / "data" / "processed" / game / "audio_stats.jsonl"
 
 
-def run(game: str, workers: int = 6) -> None:
+def run(game: str, workers: int = 4) -> None:
+    with heavy_step(f"audio {game}"):
+        _run(game, workers)
+
+
+def _run(game: str, workers: int) -> None:
     cache_path = stats_path(game)
     done = {r["clip_uid"] for r in read_jsonl(cache_path) if "error" not in r}
     todo = []
@@ -119,6 +124,6 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     ap = argparse.ArgumentParser()
     ap.add_argument("game")
-    ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--workers", type=int, default=4)
     a = ap.parse_args()
     run(a.game, a.workers)

@@ -118,7 +118,7 @@ def hoyolab_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) 
         url = f"https://wiki.hoyolab.com/pc/{app}/entry/{eid}"
         gallery = next((v for k, v in mods.items() if k.startswith("gallery")), {})
         images = []
-        for i, g in enumerate(gallery.get("list", [])):
+        for i, g in enumerate(gallery.get("list") or []):
             img = g.get("img") or ""
             if not img or img.endswith(".gif") or "モーション" in g.get("key", ""):
                 continue  # idle-animation gifs are not character art
@@ -126,10 +126,10 @@ def hoyolab_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) 
             images.append({"kind": "base" if g.get("key") in ("原画", "立ち絵") else "other", "outfit_name": g.get("key"),
                            "source_url": img, "file": f"{eid}_{i}{Path(img).suffix or '.png'}"})
         profiles = [{"lang": "ja", "kind": st.get("title"), "condition": None, "text": plain(st.get("desc")),
-                     "source_url": url} for st in mods.get("story", {}).get("list", []) if st.get("desc")]
+                     "source_url": url} for st in mods.get("story", {}).get("list") or [] if st.get("desc")]
         voices = []
-        for v in mods.get("voice", {}).get("list", []):
-            ja = next((a["url"] for a in v.get("audios", [])
+        for v in mods.get("voice", {}).get("list") or []:
+            ja = next((a["url"] for a in v.get("audios") or []
                        if a.get("name") in ("日本語", "JP") and a.get("url")), None)  # genshin / hsr labels
             if ja:
                 # genshin appends the unlock condition to the line text: move it to `condition`

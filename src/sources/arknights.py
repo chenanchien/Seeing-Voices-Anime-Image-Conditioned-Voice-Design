@@ -118,7 +118,11 @@ def build(ids: list[str] | None = None) -> None:
             "profile_texts": profiles,
             "source_urls": [page],
         })
+        # other-language voice sets (ITA, CN_TOPOLECT, ...) have their own wordKey: JP only
+        non_jp = {d["wordkey"].lower() for lt, d in lang["dict"].items() if lt != "JP"} - {jp["wordkey"].lower()}
         for w in sorted(by_char.get(cid, []), key=lambda w: (w["wordKey"], w["voiceIndex"])):
+            if w["wordKey"].lower() in non_jp:
+                continue
             asset = w["voiceAsset"].lower()
             norm = categorize(w, cfg)
             wk = w["wordKey"]
