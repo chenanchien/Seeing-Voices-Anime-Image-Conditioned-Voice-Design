@@ -90,8 +90,9 @@ class PoliteSession:
                     err = None
             if r is not None and r.status_code < 400:
                 return r
-            if r is not None and r.status_code in (403, 404, 410):
-                r.raise_for_status()  # permanent; don't hammer
+            if r is not None and r.status_code not in (429, 500, 502, 503, 504):
+                # 403/404 or a CDN bot block (e.g. EdgeOne 567): stop, never retry around it
+                raise requests.HTTPError(f"{r.status_code} for {url}", response=r)
             if r is not None and r.status_code in (429, 503):
                 retry_after = r.headers.get("Retry-After", "")
                 delay = float(retry_after) if retry_after.isdigit() else 30.0 * (attempt + 1)

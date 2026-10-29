@@ -19,6 +19,7 @@ from urllib.parse import urlsplit
 
 from src.common.http import PoliteSession, RobotsDisallowed
 from src.common.io import ROOT, file_hash, load_config, read_jsonl
+from src.sources.hf_voices import extract as hf_extract
 
 log = logging.getLogger("download")
 
@@ -76,8 +77,17 @@ def run(game: str, limit_chars: int | None = None, only: str | None = None) -> d
     sess = PoliteSession(min_interval=cfg.get("rate_limit_sec", 1.0),
                          host_intervals=cfg.get("host_rate_limit_sec", {}))
     by_host: dict[str, list[dict]] = defaultdict(list)
+    hf: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(list))  # repo -> shard -> rows
     for it in collect_items(game, limit_chars, only):
-        by_host[urlsplit(it["url"]).netloc].append(it)
+        if it["url"].startswith("hf://"):  # hf://<owner>/<repo>/<shard>#<row>
+            repo_shard, row = it["url"][5:].split("#")
+            repo, shard = repo_shard.rsplit("/", 1)
+            hf[repo][shard].append((int(row), it["path"]))
+        else:
+            by_host[urlsplit(it["url"]).netloc].append(it)
+    for repo, wanted in hf.items():
+        log.info("extracting from %s: %d shards", repo, len(wanted))
+        log.info("hf done: %s", hf_extract(repo, wanted))
 
     def worker(host: str) -> dict:
         stats: dict[str, int] = defaultdict(int)

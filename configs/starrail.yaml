@@ -1,0 +1,16 @@
+game: starrail
+rate_limit_sec: 1.0
+host_rate_limit_sec:
+  wiki.biligame.com: 1.5
+hf_repo: ultemica/honkai-star-rail-voices
+metadata: {provider: bwiki, wiki: sr}
+voice_scope:
+  character_vo: '^archive_'
+category_norm:
+  battle: '_battle|_skill|_ult'
+  default: daily
+battle_shout: '_hit|_attack'
+groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
+  - {name: 三月七, pages: [三月七•存护, 三月七•巡猎], speakers: [三月七]}
+  - {name: 开拓者(女), page_prefix: 开拓者•, speakers: [开拓者(女)], gender: female}
+  - {name: 开拓者(男), page_prefix: 开拓者•, speakers: [开拓者(男)], gender: male}

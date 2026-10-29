@@ -44,3 +44,12 @@ All of these are **decrypted client dumps**, and their own cards say no rights a
 
 1. Approve `ultemica/*` audio and use BWIKI page wikitext for CV/gender/JP text only (no File: lookups). JP CV names would then need conversion from the Chinese spelling (needs_review).
 2. Skip these three games.
+
+## 2026-10-28: BWIKI blocked during the pilot
+
+After ~30 `api.php?action=parse` requests at 1.5 s spacing, BWIKI's CDN (Tencent EdgeOne) started answering **HTTP 567** (bot protection) for `/ys/` and `/sr/`. Per project rules we stopped all BWIKI access and do not work around it. The HTTP client now never retries non-transient statuses like this.
+
+Consequences:
+- Genshin / Star Rail metadata (CV, gender, profile, art) has no working source right now. The pilot manifests from before the block (芙宁娜/胡桃/钟离, 流萤/丹恒) are complete, but the full run can't use BWIKI.
+- `name_ja` was never available from BWIKI (no Japanese-name field).
+- WuWa is unaffected (encore.moe). WuWa pilot extraction verified: 44.1 kHz mono, mean 7.4 s, ~180 KB/clip raw FLAC.

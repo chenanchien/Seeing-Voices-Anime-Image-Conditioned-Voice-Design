@@ -1,0 +1,16 @@
+game: genshin
+rate_limit_sec: 1.0
+host_rate_limit_sec:
+  wiki.biligame.com: 1.5
+hf_repo: ultemica/genshin-impact-voices
+metadata: {provider: bwiki, wiki: ys}
+# filename regexes (matched against the source file name), first match wins
+voice_scope:
+  character_vo: '^vo_(?!dialog_|tips_|event_)(?:card_)?[a-z][A-Za-z0-9]*_'
+category_norm:   # applied to character_vo; story -> other
+  battle: '_battle_|_skill|_burst|_hit|_attack'
+  default: daily
+battle_shout: '_hit|_attack|_battle_(?:dash|jump|climb|glide)'
+groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
+  - {name: 空, pages: [旅行者], speakers: [空], gender: male}
+  - {name: 荧, pages: [旅行者], speakers: [荧], gender: female}

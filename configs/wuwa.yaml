@@ -1,0 +1,19 @@
+game: wuwa
+rate_limit_sec: 1.0
+host_rate_limit_sec: {}
+hf_repo: ultemica/wuthering-waves-voices
+metadata: {provider: encore}
+encore:
+  list: https://api.encore.moe/zh-Hans/character
+  detail: https://api.encore.moe/ja/character/{id}
+  page: https://encore.moe/character/{id}?lang=ja
+voice_scope:
+  character_vo: 'play_favor_word_'
+category_norm:
+  battle: '_bat_|_skill_|_com_'
+  bond: '_about_|_favor|_birth'
+  default: daily
+battle_shout: '_com_'
+groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
+  - {name: 漂泊者_女, page_prefix: 漂泊者, where_gender: 女, speakers: [漂泊者_女]}
+  - {name: 漂泊者_男, page_prefix: 漂泊者, where_gender: 男, speakers: [漂泊者_男]}
