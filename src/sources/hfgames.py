@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import logging
 import re
 from collections import defaultdict
@@ -75,6 +76,72 @@ def bwiki_art(page_html: str, name: str) -> list[dict]:
     return imgs
 
 
+HOYOLAB_LIST = "https://sg-wiki-api.hoyolab.com/hoyowiki/{app}/wapi/get_entry_page_list"
+HOYOLAB_PAGE = "https://sg-wiki-api-static.hoyolab.com/hoyowiki/{app}/wapi/entry_page"
+
+
+def hoyolab_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) -> list[dict]:
+    """JP name/CV/art/profile + official JP voice lines from the HoYoLAB wiki API.
+    The zh-cn list gives the names that join with HF speakers (same entry_page_id)."""
+    app, menu = cfg["hoyolab"]["app"], cfg["hoyolab"]["menu_id"]
+    hdr = lambda lang: {"x-rpc-language": lang, "x-rpc-wiki_app": app, "Referer": "https://wiki.hoyolab.com/"}
+    text = lambda h: html.unescape(re.sub(r"<br\s*/?>|</p>\s*<p>", "\n", h or "")).strip()
+    plain = lambda h: re.sub(r"<[^>]+>", "", text(h)).strip()
+
+    def entries(lang: str) -> list[dict]:
+        out, page = [], 1
+        while True:
+            d = sess.post(HOYOLAB_LIST.format(app=app), headers=hdr(lang),
+                          json={"filters": [], "menu_id": menu, "page_num": page, "page_size": 30,
+                                "use_es": True}).json()["data"]
+            out += d["list"]
+            if not d["list"] or len(out) >= int(d["total"]):
+                return out
+            page += 1
+
+    zh = {e["entry_page_id"]: e["name"] for e in entries("zh-cn")}
+    out = []
+    for e in entries("ja-jp"):
+        eid, name_zh = e["entry_page_id"], zh.get(e["entry_page_id"], e["name"])
+        if names and name_zh not in names:
+            continue
+        page = sess.get(HOYOLAB_PAGE.format(app=app), params={"entry_page_id": eid},
+                        headers=hdr("ja-jp")).json()["data"]["page"]
+        mods: dict[str, dict] = {}
+        for m in page["modules"]:
+            for c in m["components"]:
+                mods.setdefault(c["component_id"], json.loads(c["data"] or "{}"))
+        base = {i["key"]: plain(i["value"][0]) for i in mods.get("baseInfo", {}).get("list", []) if i.get("value")}
+        name_ja = page["name"]  # the ja-jp page title is the JP name (和名 may be ruby markup)
+        name_en = (base.get("和名 / 英名") or "").rpartition(" / ")[2].strip() or None
+        cv = next((v for k, v in base.items() if "日本語" in k and "CV" in k), None)
+        url = f"https://wiki.hoyolab.com/pc/{app}/entry/{eid}"
+        gallery = next((v for k, v in mods.items() if k.startswith("gallery")), {})
+        images = []
+        for i, g in enumerate(gallery.get("list", [])):
+            img = g.get("img") or ""
+            if not img or img.endswith(".gif") or "モーション" in g.get("key", ""):
+                continue  # idle-animation gifs are not character art
+            # 原画 (genshin) / 立ち絵 (hsr) = official character art; the rest are promo / birthday illustrations
+            images.append({"kind": "base" if g.get("key") in ("原画", "立ち絵") else "other", "outfit_name": g.get("key"),
+                           "source_url": img, "file": f"{eid}_{i}{Path(img).suffix or '.png'}"})
+        profiles = [{"lang": "ja", "kind": st.get("title"), "condition": None, "text": plain(st.get("desc")),
+                     "source_url": url} for st in mods.get("story", {}).get("list", []) if st.get("desc")]
+        voices = []
+        for v in mods.get("voice", {}).get("list", []):
+            ja = next((a["url"] for a in v.get("audios", [])
+                       if a.get("name") in ("日本語", "JP") and a.get("url")), None)  # genshin / hsr labels
+            if ja:
+                voices.append({"id": v.get("id"), "title": plain(v.get("title")), "text": plain(v.get("desc")),
+                               "url": ja})
+        out.append({"id": str(eid), "name_zh": name_zh, "name_ja": name_ja or None, "name_en": name_en or None,
+                    "gender_raw": None, "cv_name_ja": cv, "images": images, "profile_texts": profiles,
+                    "voice_lines": voices, "source_urls": [url]})
+        log.info("%s %s / %s: %d images, %d stories, %d JP voice lines", eid, name_zh, name_ja,
+                 len(images), len(profiles), len(voices))
+    return out
+
+
 def encore_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) -> list[dict]:
     ec = cfg["encore"]
     out, seen = [], set()
@@ -112,26 +179,49 @@ def encore_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) -
 
 def apply_groups(meta: list[dict], groups: list[dict]) -> list[dict]:
     """Merge wiki pages into dataset characters per config `groups`; other pages map 1:1 to
-    the HF speaker with the same name."""
+    the HF speaker with the same name. In a group the first listed page is the base; later
+    pages are versions whose art and voice lines get that version's name as outfit_name.
+    Official voice lines of a page shared by several groups (e.g. one Trailblazer page, two
+    voices) are dropped, since we can't tell which voice they use."""
+    def members(g: dict) -> list[dict]:
+        ms = [m for m in meta
+              if (m["name_zh"] in g.get("pages", []) or
+                  (g.get("page_prefix") and m["name_zh"].startswith(g["page_prefix"])))
+              and (not g.get("where_gender") or m["gender_raw"] == g["where_gender"])]
+        order = g.get("pages", [])
+        return sorted(ms, key=lambda m: order.index(m["name_zh"]) if m["name_zh"] in order else len(order))
+
+    shared = defaultdict(int)
+    for g in groups:
+        for m in members(g):
+            shared[id(m)] += 1
     used, out = set(), []
     for g in groups:
-        pages = [m for m in meta
-                 if (m["name_zh"] in g.get("pages", []) or
-                     (g.get("page_prefix") and m["name_zh"].startswith(g["page_prefix"])))
-                 and (not g.get("where_gender") or m["gender_raw"] == g["where_gender"])]
+        pages = members(g)
         if not pages:
             continue
         used.update(id(m) for m in pages)
-        seen_img, seen_txt = set(), set()
-        images = [dict(i) for m in pages for i in m["images"]  # copies: pages can feed several groups
-                  if not (i["source_url"] in seen_img or seen_img.add(i["source_url"]))]
-        texts = [t for m in pages for t in m["profile_texts"] if not (t["text"] in seen_txt or seen_txt.add(t["text"]))]
+        images, texts, voices, seen_img, seen_txt = [], [], [], set(), set()
+        for idx, m in enumerate(pages):
+            outfit = m["name_ja"] if idx and g.get("pages") else None
+            for i in m["images"]:
+                if i["source_url"] in seen_img:
+                    continue
+                seen_img.add(i["source_url"])
+                images.append(dict(i) | ({"kind": "skin" if i["kind"] == "base" else i["kind"],
+                                          "outfit_name": f"{outfit} {i['outfit_name']}"} if outfit else {}))
+            for t in m["profile_texts"]:
+                if t["text"] not in seen_txt:
+                    seen_txt.add(t["text"])
+                    texts.append(t | ({"condition": outfit} if outfit else {}))
+            if shared[id(m)] == 1:
+                voices += [v | {"outfit": outfit} for v in m.get("voice_lines", [])]
         first = lambda k: next((m[k] for m in pages if m[k]), None)
         out.append({"id": g["name"], "name_zh": g["name"], "name_ja": first("name_ja"), "name_en": first("name_en"),
                     "gender_raw": first("gender_raw"), "gender_override": g.get("gender"),
                     "cv_name_ja": first("cv_name_ja"), "images": images, "profile_texts": texts,
-                    "source_urls": sorted({u for m in pages for u in m["source_urls"]}),
-                    "speakers": g["speakers"], "pages": [m["name_zh"] for m in pages]})
+                    "source_urls": [u for m in pages for u in m["source_urls"]],
+                    "speakers": g["speakers"], "pages": [m["name_zh"] for m in pages], "voice_lines": voices})
     for m in meta:
         if id(m) not in used:
             out.append(m | {"speakers": [m["name_zh"]], "gender_override": None})
@@ -142,7 +232,9 @@ def build(game: str, names: list[str] | None = None) -> None:
     cfg = load_config(game)
     raw = Path(f"data/raw/{game}")
     sess = PoliteSession(min_interval=cfg["rate_limit_sec"], host_intervals=cfg["host_rate_limit_sec"])
-    meta = (bwiki_characters(sess, cfg["metadata"]["wiki"], names) if cfg["metadata"]["provider"] == "bwiki"
+    provider = cfg["metadata"]["provider"]
+    meta = (bwiki_characters(sess, cfg["metadata"]["wiki"], names) if provider == "bwiki"
+            else hoyolab_characters(sess, cfg, names) if provider == "hoyolab"
             else encore_characters(sess, cfg, names))
     meta = apply_groups(meta, cfg.get("groups", []))
 
@@ -153,6 +245,8 @@ def build(game: str, names: list[str] | None = None) -> None:
     vo_re = re.compile(cfg["voice_scope"]["character_vo"])
     norm_rules = {k: re.compile(v) for k, v in cfg["category_norm"].items() if k != "default"}
     shout_re = re.compile(cfg["battle_shout"])
+    title_rules = {k: re.compile(v) for k, v in cfg.get("voice_title_norm", {}).items()}
+    title_shout = re.compile(cfg.get("voice_title_shout", "(?!)"))
 
     chars, clips, unmatched = [], [], []
     for m in meta:
@@ -173,6 +267,20 @@ def build(game: str, names: list[str] | None = None) -> None:
             "hf_speakers": speakers, "wiki_pages": m.get("pages", [m["name_zh"]]), "images": m["images"], "profile_texts": m["profile_texts"],
             "source_urls": m["source_urls"] + [f"https://huggingface.co/datasets/{cfg['hf_repo']}"],
         })
+        seen_text = set()
+        for v in m.get("voice_lines", []):  # official JP character voice-over (HoYoLAB)
+            norm = next((k for k, rx in title_rules.items() if rx.search(v["title"])), "daily")
+            seen_text.add(re.sub(r"\W", "", v["text"]))
+            clips.append({
+                "clip_uid": f"{game}:hl:{m['id']}:{v['id']}", "char_uid": uid, "outfit_name": v.get("outfit"),
+                "category": f"character_vo/{v['title']}", "category_norm": norm,
+                "voice_scope": "character_vo", "speaker": None, "condition": None, "is_legacy": False,
+                "text_ja": v["text"] or None, "text_zh": None, "text_source": "hoyolab" if v["text"] else None,
+                "audio_file": v["url"].rsplit("/", 1)[1],
+                "audio_path": str(raw / "audio" / "hoyolab" / m["id"] / v["url"].rsplit("/", 1)[1]),
+                "audio_url": v["url"], "source_sha1": None, "source_url": m["source_urls"][0],
+                "is_battle_shout": norm == "battle" and bool(title_shout.search(v["title"])),
+            })
         for r in rows:
             fname = r["source_path"].rsplit("/", 1)[1]
             stem = fname.rsplit(".", 1)[0]
@@ -182,6 +290,8 @@ def build(game: str, names: list[str] | None = None) -> None:
             norm = "other" if scope == "story" else next(
                 (k for k, rx in norm_rules.items() if rx.search(fname)), cfg["category_norm"]["default"])
             text = (r["transcription"] or "").strip()
+            if text and re.sub(r"\W", "", text) in seen_text:
+                continue  # same line already taken from HoYoLAB
             line_type = re.sub(r"_?\d+[a-z]?$", "", stem)  # drop the line number
             clips.append({
                 "clip_uid": f"{game}:{stem}", "char_uid": uid, "outfit_name": None,

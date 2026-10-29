@@ -24,7 +24,7 @@ resume.sh runs `caffeinate -ims` itself, so the Mac stays awake while it runs (s
 | FGO | complete: 471 characters, 45,829 clips | ~2,200 / 45,685 audio (~1 clip/s → ~12 h left) | audio, langid, finalize |
 | Arknights | complete: 366 characters, 15,319 clips | ~600 / 15,319 (torappu is slow, ~15 h) | same |
 | Blue Archive | complete: 151 characters, 18,607 clips | ~1,800 / 18,607 (~5 h) | same |
-| Genshin / Star Rail / WuWa | pilot only (3 characters each) | not started | waiting on decisions below |
+| Genshin / Star Rail / WuWa | pilots built (HoYoLAB + HF character_vo; encore.moe for WuWa) | pilot download/clean running | full run after pilot review |
 
 FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profiles-only` (in resume.sh).
 
@@ -35,7 +35,8 @@ FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profile
 
 ## Next step
 
-Write the HoYoLAB adapter (endpoints in docs/sources/hoyoverse_kuro.md): JP name, JP CV, art, JP profile, and official JP character voice lines for Genshin/Star Rail. Join with HF character_vo on the zh-cn name. Pilot 3 characters per game, then full run. WuWa (encore.moe) adapter is already built; run its full pipeline after the HoYoLAB pilot.
+HoYoLAB adapter is built (see docs/sources/hoyoverse_kuro.md). After the pilot check, run the full adapters:
+`python -m src.sources.hfgames {genshin,starrail,wuwa}`, then the same download/clean chain (add these games to GAMES in scripts/resume.sh).
 
 ## To-do
 

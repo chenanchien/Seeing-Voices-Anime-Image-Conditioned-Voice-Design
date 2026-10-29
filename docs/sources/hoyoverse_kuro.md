@@ -71,3 +71,14 @@ Modules on the JP page:
 - **No gender field** in either game (filters: rarity, region/path, element, weapon only).
 
 Plan: metadata + character voice-over from HoYoLAB (JP); story dialogue from HF ultemica, joined on the zh-cn name. Gender stays `unknown` unless labelled manually.
+
+## 2026-10-28: HoYoLAB adapter built (`src/sources/hfgames.py`, provider `hoyolab`)
+
+- Genshin uses `menu_id 2`; Star Rail uses `menu_id 104` + header `x-rpc-wiki_app: hsr`. The JP voice audio label is `日本語` (genshin) / `JP` (hsr); the main art key is `原画` / `立ち絵`. `name_ja` = ja-jp page title (和名 can be ruby markup).
+- Clips per character: official HoYoLAB JP voice lines (`text_source=hoyolab`), plus HF character_vo lines not already covered (deduplicated by normalized text).
+- Pilot: Genshin フリーナ/鍾離/胡桃 → 422 clips; Star Rail ホタル/丹恒/丹恒・飲月/三月なのか/アベンチュリン → 429 clips.
+- Grouping (configs/starrail.yaml `groups`):
+  - same character in another version → merged, variant = outfit: 三月七 (存护/巡猎), 砂金•戏浪, 知更鸟•晴歌, 姬子•启行
+  - different forms kept separate (like FGO/Arknights alters): 丹恒•饮月, 丹恒•腾荒
+  - Trailblazer / Traveler: split by the HF male/female voice labels. The official voice lines of their shared pages are dropped, because we can't tell which voice they use.
+- Gender: left `unknown` for Genshin/Star Rail (owner decision; fill later via lookup).

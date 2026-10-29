@@ -1,9 +1,17 @@
 game: genshin
 rate_limit_sec: 1.0
 host_rate_limit_sec:
-  wiki.biligame.com: 1.5
+  sg-wiki-api.hoyolab.com: 1.0
 hf_repo: ultemica/genshin-impact-voices
-metadata: {provider: bwiki, wiki: ys}
+# BWIKI blocked us (HTTP 567) -> HoYoLAB wiki API (JP)
+metadata: {provider: hoyolab}
+hoyolab: {app: genshin, menu_id: "2"}
+# HoYoLAB voice titles (JP) -> category_norm (default daily); short battle shouts excluded
+voice_title_norm:
+  battle: '戦闘|スキル|元素|爆発|必殺技|攻撃|被弾|ダメージ|重撃|落下|ダッシュ|秘技|弱点|HP|天賦|戦技|ダウン|撃破|追加攻撃'
+  bond: '好感|について|を知る|秘密|悩み|打ち明け'
+voice_title_shout: '通常攻撃|重撃|落下|被弾|ダッシュ|ダメージ|ジャンプ'
+
 # filename regexes (matched against the source file name), first match wins
 voice_scope:
   character_vo: '^vo_(?!dialog_|tips_|event_)(?:card_)?[a-z][A-Za-z0-9]*_'
@@ -12,8 +20,8 @@ category_norm:   # applied to character_vo; story -> other
   default: daily
 battle_shout: '_hit|_attack|_battle_(?:dash|jump|climb|glide)'
 groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
-  - {name: 空, pages: [旅行者], speakers: [空], gender: male}
-  - {name: 荧, pages: [旅行者], speakers: [荧], gender: female}
+  - {name: 空, page_prefix: 旅行者, speakers: [空]}
+  - {name: 荧, page_prefix: 旅行者, speakers: [荧]}
 
 # story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
 include_story: false

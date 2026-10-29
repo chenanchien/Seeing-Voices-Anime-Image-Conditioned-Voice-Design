@@ -74,7 +74,14 @@ class PoliteSession:
         rp = self._robots[base]
         return True if rp is None else rp.can_fetch(self.ua, url)
 
-    def get(self, url: str, *, params: dict | None = None, stream: bool = False) -> requests.Response:
+    def get(self, url: str, **kw) -> requests.Response:
+        return self.request("GET", url, **kw)
+
+    def post(self, url: str, **kw) -> requests.Response:
+        return self.request("POST", url, **kw)
+
+    def request(self, method: str, url: str, *, params: dict | None = None, json: dict | None = None,
+                headers: dict | None = None, stream: bool = False) -> requests.Response:
         if not self.allowed(url):
             raise RobotsDisallowed(url)
         host = urlsplit(url).netloc
@@ -82,7 +89,8 @@ class PoliteSession:
             with self._host_lock(host):
                 self._wait_turn(host)
                 try:
-                    r = self._session.get(url, params=params, stream=stream, timeout=self.timeout)
+                    r = self._session.request(method, url, params=params, json=json, headers=headers,
+                                              stream=stream, timeout=self.timeout)
                 except requests.RequestException as e:
                     err: Exception | None = e
                     r = None

@@ -1,9 +1,17 @@
 game: starrail
 rate_limit_sec: 1.0
 host_rate_limit_sec:
-  wiki.biligame.com: 1.5
+  sg-wiki-api.hoyolab.com: 1.0
 hf_repo: ultemica/honkai-star-rail-voices
-metadata: {provider: bwiki, wiki: sr}
+# BWIKI blocked us (HTTP 567) -> HoYoLAB wiki API (JP)
+metadata: {provider: hoyolab}
+hoyolab: {app: hsr, menu_id: "104"}
+# HoYoLAB voice titles (JP) -> category_norm (default daily); short battle shouts excluded
+voice_title_norm:
+  battle: '戦闘|スキル|元素|爆発|必殺技|攻撃|被弾|ダメージ|重撃|落下|ダッシュ|秘技|弱点|HP|天賦|戦技|ダウン|撃破|追加攻撃'
+  bond: '好感|について|を知る|秘密|悩み|打ち明け'
+voice_title_shout: '通常攻撃|重撃|落下|被弾|ダッシュ|ダメージ|ジャンプ'
+
 voice_scope:
   character_vo: '^archive_'
 category_norm:
@@ -11,9 +19,15 @@ category_norm:
   default: daily
 battle_shout: '_hit|_attack'
 groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
-  - {name: 三月七, pages: [三月七•存护, 三月七•巡猎], speakers: [三月七]}
-  - {name: 开拓者(女), page_prefix: 开拓者•, speakers: [开拓者(女)], gender: female}
-  - {name: 开拓者(男), page_prefix: 开拓者•, speakers: [开拓者(男)], gender: male}
+  # same character in another version (like Blue Archive styles): merged, variant = outfit
+  - {name: 三月七, pages: [三月七 - 存护, 三月七•巡猎], speakers: [三月七]}
+  - {name: 砂金, pages: [砂金, 砂金•戏浪], speakers: [砂金]}
+  - {name: 知更鸟, pages: [知更鸟, 知更鸟•晴歌], speakers: [知更鸟]}
+  - {name: 姬子, pages: [姬子, 姬子•启行], speakers: [姬子]}
+  # player character: one page set, two voices (HF speaker labels)
+  - {name: 开拓者(女), page_prefix: 开拓者, speakers: [开拓者(女)]}
+  - {name: 开拓者(男), page_prefix: 开拓者, speakers: [开拓者(男)]}
+  # 丹恒•饮月 / 丹恒•腾荒 are different forms (like FGO/Arknights alters): kept separate
 
 # story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
 include_story: false
