@@ -2,7 +2,10 @@
 # Resume the data pipelines after the computer was shut down or the run was interrupted.
 # Every step skips finished work (existing files, cached rows), so this is always safe to rerun.
 #
-#   nohup caffeinate -i scripts/resume.sh > data/logs/resume.log 2>&1 &
+#   nohup scripts/resume.sh > data/logs/resume.log 2>&1 &
+#
+# The script keeps the Mac awake itself (caffeinate) for as long as it runs. Closing the lid
+# without an external display still forces sleep, so leave the lid open.
 #
 # Games resumed here already have complete manifests, so adapters are NOT rerun
 # (no new wiki crawling). See docs/STATUS.md for what is done and what is pending.
@@ -10,6 +13,9 @@ set -u
 cd "$(dirname "$0")/.."
 P=.venv/bin/python
 mkdir -p data/logs
+
+# -i idle sleep, -m disk sleep, -s system sleep (on AC power); released when this script exits
+caffeinate -ims -w $$ &
 
 GAMES=(fgo arknights bluearchive)
 

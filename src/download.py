@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import time
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -22,6 +23,11 @@ from src.common.io import ROOT, file_hash, load_config, read_jsonl
 from src.sources.hf_voices import extract as hf_extract
 
 log = logging.getLogger("download")
+
+STREAM_ATTEMPTS = 3        # a read timeout mid-body retries that file
+OUTAGE_STREAK = 10         # this many failures in a row = network probably down
+OUTAGE_PAUSE_SEC = 300
+RETRY_PASSES = 2           # extra passes over failed items at the end
 
 
 def collect_items(game: str, limit_chars: int | None, only: str | None) -> list[dict]:
@@ -53,17 +59,23 @@ def fetch_one(sess: PoliteSession, item: dict) -> str:
         if not item["sha1"] or file_hash(dest) == item["sha1"]:
             return "skipped"
     dest.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        r = sess.get(item["url"], stream=True)
-    except RobotsDisallowed:
-        return "robots"
-    except Exception as e:  # 404 etc. are recorded, not fatal
-        log.warning("failed %s: %s", item["url"], e)
-        return "failed"
     tmp = dest.with_suffix(dest.suffix + ".part")
-    with open(tmp, "wb") as f:
-        for chunk in r.iter_content(1 << 16):
-            f.write(chunk)
+    for attempt in range(STREAM_ATTEMPTS):
+        try:
+            r = sess.get(item["url"], stream=True)
+            with open(tmp, "wb") as f:
+                for chunk in r.iter_content(1 << 16):
+                    f.write(chunk)
+            break
+        except RobotsDisallowed:
+            return "robots"
+        except Exception as e:  # 404, timeouts, dropped connections: recorded, never fatal
+            tmp.unlink(missing_ok=True)
+            status = getattr(getattr(e, "response", None), "status_code", None)
+            if status in (403, 404, 410) or attempt == STREAM_ATTEMPTS - 1:
+                log.warning("failed %s: %s", item["url"], e)
+                return "missing" if status in (404, 410) else "failed"
+            time.sleep(30 * (attempt + 1))
     if item["sha1"] and file_hash(tmp) != item["sha1"]:
         log.warning("checksum mismatch %s", item["url"])
         tmp.unlink()
@@ -92,10 +104,27 @@ def run(game: str, limit_chars: int | None = None, only: str | None = None) -> d
     def worker(host: str) -> dict:
         stats: dict[str, int] = defaultdict(int)
         items = by_host[host]
-        for i, it in enumerate(items, 1):
-            stats[fetch_one(sess, it)] += 1
-            if i % 200 == 0 or i == len(items):
-                log.info("%s: %d/%d %s", host, i, len(items), dict(stats))
+        for p in range(1 + RETRY_PASSES):
+            failed, streak = [], 0
+            for i, it in enumerate(items, 1):
+                res = fetch_one(sess, it)
+                if res == "failed":
+                    failed.append(it)
+                    streak += 1
+                    if streak >= OUTAGE_STREAK:  # likely offline (e.g. the Mac slept): wait, don't burn items
+                        log.warning("%s: %d failures in a row, pausing %ds", host, streak, OUTAGE_PAUSE_SEC)
+                        time.sleep(OUTAGE_PAUSE_SEC)
+                        streak = 0
+                else:
+                    stats[res] += 1
+                    streak = 0
+                if i % 200 == 0 or i == len(items):
+                    log.info("%s: pass %d %d/%d %s failed=%d", host, p + 1, i, len(items), dict(stats), len(failed))
+            if not failed:
+                break
+            items = failed
+            time.sleep(OUTAGE_PAUSE_SEC)
+        stats["failed"] = len(failed)
         return dict(stats)
 
     with ThreadPoolExecutor(max_workers=max(1, len(by_host))) as ex:

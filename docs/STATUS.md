@@ -6,7 +6,7 @@ Last updated: 2026-10-28 21:10 (computer about to shut down; downloads interrupt
 
 ```bash
 cd Seeing-Voices-Anime-Image-Conditioned-Voice-Design
-nohup caffeinate -i scripts/resume.sh > data/logs/resume.log 2>&1 &
+nohup scripts/resume.sh > data/logs/resume.log 2>&1 &
 tail -f data/logs/fgo_full.log      # or arknights_full.log / bluearchive_full.log
 ```
 
@@ -15,7 +15,7 @@ tail -f data/logs/fgo_full.log      # or arknights_full.log / bluearchive_full.l
 - audio cleaning and Whisper: per-clip caches in `data/processed/<game>/`; a line cut off by the shutdown is ignored and that clip is redone
 - adapters are **not** rerun: manifests are already complete, so no new wiki crawling
 
-`caffeinate -i` keeps the Mac from sleeping while it runs (close the lid only if on power / clamshell).
+resume.sh runs `caffeinate -ims` itself, so the Mac stays awake while it runs (screen may turn off). Keep it plugged in and the lid open: closing the lid without an external display still sleeps the Mac, and the network drops. 2026-10-28 22:50: a sleep (\"Wake from Deep Idle … lid\") made all downloads time out. The downloader now pauses and retries through outages instead of crashing.
 
 ## Progress at shutdown
 
