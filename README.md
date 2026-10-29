@@ -49,7 +49,7 @@ Every step is idempotent and caches its work, so steps can be rerun at any time.
 - Source fields: `clip_uid`, `char_uid`, `outfit_name`, `category` (raw), `category_norm` (battle|daily|bond|system|other), `voice_scope` (character_vo|story; story dialogue only in the HF-based games), `condition`, `is_legacy`, `text_ja`, `text_zh`, `text_source` (wiki|gamedata|asr), `audio_path`, `audio_url`, `source_url`, `source_sha1`.
 - Quality fields: `duration_sec`, `sample_rate`, `orig_sample_rate`, `loudness_lufs_orig`, `wav24_path`, `wav16_path`, `audio_sha1`, `duplicate_of`, `lang`, `lang_prob`, `exclude`, `exclude_reasons`.
 
-Excluded clips stay in the manifest. Duration is not an exclusion reason (all lengths kept for now); `duration_flag` marks `short` (<1 s) and `long` (>15 s) for later filtering or splitting. Exclusion reasons: `battle_shout`, `non_japanese` (Whisper prob ≥ 0.5), `duplicate_audio`, `no_text`, `not_downloaded`, `no_audio_source`, `decode_error`.
+Excluded clips stay in the manifest. Duration is not an exclusion reason (all lengths kept for now); `duration_flag` marks `short` (<1 s) and `long` (>15 s) for later filtering or splitting. Exclusion reasons: `battle_shout`, `non_japanese` (Whisper prob ≥ 0.5 on clips ≥ 2 s; ≥ 0.9 when the source text has kana), `nonverbal` (source text 台詞なし), `empty_audio`, `duplicate_audio`, `no_text`, `not_downloaded`, `no_audio_source`, `decode_error`.
 
 ## Crawling policy
 

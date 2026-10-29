@@ -132,8 +132,10 @@ def hoyolab_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) 
             ja = next((a["url"] for a in v.get("audios", [])
                        if a.get("name") in ("日本語", "JP") and a.get("url")), None)  # genshin / hsr labels
             if ja:
-                voices.append({"id": v.get("id"), "title": plain(v.get("title")), "text": plain(v.get("desc")),
-                               "url": ja})
+                # genshin appends the unlock condition to the line text: move it to `condition`
+                body, _, cond = plain(v.get("desc")).partition("解放条件：")
+                voices.append({"id": v.get("id"), "title": plain(v.get("title")), "text": body.strip(),
+                               "condition": cond.strip() or None, "url": ja})
         out.append({"id": str(eid), "name_zh": name_zh, "name_ja": name_ja or None, "name_en": name_en or None,
                     "gender_raw": None, "cv_name_ja": cv, "images": images, "profile_texts": profiles,
                     "voice_lines": voices, "source_urls": [url]})
@@ -274,7 +276,7 @@ def build(game: str, names: list[str] | None = None) -> None:
             clips.append({
                 "clip_uid": f"{game}:hl:{m['id']}:{v['id']}", "char_uid": uid, "outfit_name": v.get("outfit"),
                 "category": f"character_vo/{v['title']}", "category_norm": norm,
-                "voice_scope": "character_vo", "speaker": None, "condition": None, "is_legacy": False,
+                "voice_scope": "character_vo", "speaker": None, "condition": v.get("condition"), "is_legacy": False,
                 "text_ja": v["text"] or None, "text_zh": None, "text_source": "hoyolab" if v["text"] else None,
                 "audio_file": v["url"].rsplit("/", 1)[1],
                 "audio_path": str(raw / "audio" / "hoyolab" / m["id"] / v["url"].rsplit("/", 1)[1]),

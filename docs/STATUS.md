@@ -24,7 +24,7 @@ resume.sh runs `caffeinate -ims` itself, so the Mac stays awake while it runs (s
 | FGO | complete: 471 characters, 45,829 clips | ~2,200 / 45,685 audio (~1 clip/s → ~12 h left) | audio, langid, finalize |
 | Arknights | complete: 366 characters, 15,319 clips | ~600 / 15,319 (torappu is slow, ~15 h) | same |
 | Blue Archive | complete: 151 characters, 18,607 clips | ~1,800 / 18,607 (~5 h) | same |
-| Genshin / Star Rail / WuWa | pilots built (HoYoLAB + HF character_vo; encore.moe for WuWa) | pilot download/clean running | full run after pilot review |
+| Genshin / Star Rail / WuWa | pilots passed (412/401/276 usable of 3 chars each); full adapters + pipeline started 2026-10-28 23:15 | in progress | resume.sh reruns an adapter until `data/raw/<game>/.adapter_full_done` exists |
 
 FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profiles-only` (in resume.sh).
 

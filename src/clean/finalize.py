@@ -20,6 +20,8 @@ log = logging.getLogger("clean.finalize")
 MIN_SEC, MAX_SEC = 1.0, 15.0
 LANG_MIN_PROB = 0.5  # only exclude as non-Japanese when Whisper is reasonably sure
 LANG_MIN_SEC = 2.0   # Whisper language ID is unreliable on short interjections
+LANG_MIN_PROB_KANA = 0.9  # stricter when the source transcript is Japanese (has kana)
+NONVERBAL_TEXTS = {"台詞なし"}  # source placeholder for breaths / humming / effort sounds
 KANA = re.compile(r"[\u3040-\u30ff]")
 
 
@@ -60,6 +62,8 @@ def run(game: str) -> None:
         else:
             d = st["duration_sec"]
             clip["duration_flag"] = "short" if d < MIN_SEC else "long" if d > MAX_SEC else None
+            if d < 0.05:
+                reasons.append("empty_audio")
             dup_of = seen_sha1.setdefault(st["audio_sha1"], uid)
             clip["duplicate_of"] = dup_of if dup_of != uid else None
             if clip["duplicate_of"]:
@@ -70,8 +74,10 @@ def run(game: str) -> None:
         clip["lang"] = lg["lang"] if lg else None
         clip["lang_prob"] = lg["lang_prob"] if lg else None
         clip["lang_uncertain"] = False
+        source_text = clip.get("text_ja") if clip.get("text_source") not in (None, "asr") else None
+        min_prob = LANG_MIN_PROB_KANA if source_text and KANA.search(source_text) else LANG_MIN_PROB
         if lg and lg["lang"] != "ja" and lg["lang_prob"] >= LANG_MIN_PROB:
-            if (st.get("duration_sec") or 0) >= LANG_MIN_SEC:
+            if (st.get("duration_sec") or 0) >= LANG_MIN_SEC and lg["lang_prob"] >= min_prob:
                 reasons.append("non_japanese")
             else:
                 clip["lang_uncertain"] = True
@@ -79,7 +85,9 @@ def run(game: str) -> None:
             if clip.get("text_source") not in (None, "asr"):
                 clip["text_ja_source"] = clip["text_ja"]  # keep the mismatched source text
             clip["text_ja"], clip["text_source"] = lg["asr_text_ja"], "asr"
-        if not clip.get("text_ja"):
+        if (clip.get("text_ja") or "").strip() in NONVERBAL_TEXTS:
+            reasons.append("nonverbal")
+        elif not clip.get("text_ja"):
             reasons.append("no_text")
 
         clip["exclude_reasons"] = reasons
