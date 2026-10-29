@@ -14,3 +14,6 @@ groups:   # one dataset character built from several wiki pages / routed to spec
   - {name: 三月七, pages: [三月七•存护, 三月七•巡猎], speakers: [三月七]}
   - {name: 开拓者(女), page_prefix: 开拓者•, speakers: [开拓者(女)], gender: female}
   - {name: 开拓者(男), page_prefix: 开拓者•, speakers: [开拓者(男)], gender: male}
+
+# story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
+include_story: false

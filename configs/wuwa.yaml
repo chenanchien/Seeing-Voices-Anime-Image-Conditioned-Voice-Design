@@ -17,3 +17,6 @@ battle_shout: '_com_'
 groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
   - {name: 漂泊者_女, page_prefix: 漂泊者, where_gender: 女, speakers: [漂泊者_女]}
   - {name: 漂泊者_男, page_prefix: 漂泊者, where_gender: 男, speakers: [漂泊者_男]}
+
+# story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
+include_story: false

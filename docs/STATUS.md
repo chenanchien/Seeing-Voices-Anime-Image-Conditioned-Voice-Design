@@ -28,11 +28,14 @@ tail -f data/logs/fgo_full.log      # or arknights_full.log / bluearchive_full.l
 
 FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profiles-only` (in resume.sh).
 
-## Pending decisions (project owner)
+## Decisions (project owner, 2026-10-28)
 
-1. **Genshin / Star Rail gender.** HoYoLAB (the replacement for the bot-blocked BWIKI) has no gender field. Options: a manual labelling list, or a rule like Blue Archive's.
-2. **Disk plan for HF story dialogue** (~200k clips): delete HF raw audio after processing (re-extractable from `data/raw/<game>/hf_index.parquet`) and store story clips at 24 kHz only (16 kHz derived on the fly). Estimated total ~72 GB of 85 GB free.
-3. Then: write the HoYoLAB adapter (docs/sources/hoyoverse_kuro.md), pilot 3 characters per game, run in batches.
+1. **Genshin / Star Rail gender**: leave `unknown` for now; fill later via lookup.
+2. **Story dialogue**: skipped for now (`include_story: false` in configs/{genshin,starrail,wuwa}.yaml). Only character voice-over is collected. Story rows remain listed in `data/raw/<game>/hf_index.parquet` for later.
+
+## Next step
+
+Write the HoYoLAB adapter (endpoints in docs/sources/hoyoverse_kuro.md): JP name, JP CV, art, JP profile, and official JP character voice lines for Genshin/Star Rail. Join with HF character_vo on the zh-cn name. Pilot 3 characters per game, then full run. WuWa (encore.moe) adapter is already built; run its full pipeline after the HoYoLAB pilot.
 
 ## To-do
 

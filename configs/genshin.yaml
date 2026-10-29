@@ -14,3 +14,6 @@ battle_shout: '_hit|_attack|_battle_(?:dash|jump|climb|glide)'
 groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
   - {name: 空, pages: [旅行者], speakers: [空], gender: male}
   - {name: 荧, pages: [旅行者], speakers: [荧], gender: female}
+
+# story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
+include_story: false

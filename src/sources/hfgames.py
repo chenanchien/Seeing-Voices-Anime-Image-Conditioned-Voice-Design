@@ -177,6 +177,8 @@ def build(game: str, names: list[str] | None = None) -> None:
             fname = r["source_path"].rsplit("/", 1)[1]
             stem = fname.rsplit(".", 1)[0]
             scope = "character_vo" if vo_re.search(fname) else "story"
+            if scope == "story" and not cfg.get("include_story", True):
+                continue
             norm = "other" if scope == "story" else next(
                 (k for k, rx in norm_rules.items() if rx.search(fname)), cfg["category_norm"]["default"])
             text = (r["transcription"] or "").strip()
