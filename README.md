@@ -11,7 +11,7 @@ configs/<game>.yaml        source URLs, rate limits, category rules
 src/common/                polite HTTP client (robots.txt, per-host rate limit, retries), IO helpers
 src/sources/<game>.py      one adapter per game → manifests/<game>_characters.jsonl, <game>_clips.jsonl
 src/download.py            resumable downloader (skip existing, sha1 check, one worker per host)
-src/clean/audio.py         mono, trim silence, -23 LUFS, 24 kHz + 16 kHz WAV
+src/clean/audio.py         mono, trim silence, -23 LUFS, 24 kHz + 16 kHz (16-bit FLAC, lossless)
 src/clean/langid.py        Whisper small language check + ASR for missing text
 src/clean/finalize.py      merge quality fields, exclusion flags, checksum dedup
 src/clean/voice_actors.py  manifests/voice_actors.csv + cv_uid
@@ -30,6 +30,7 @@ uv venv -p 3.12 && uv sync      # no ffmpeg needed (libsndfile decodes mp3)
 
 ```bash
 python -m src.sources.fgo --ids 1 2 11   # pilot on 3 characters (omit --ids for all)
+# other adapters: src.sources.arknights --ids char_002_amiya ..., src.sources.bluearchive --names アル ...
 python -m src.download fgo               # resumable; rerun after interruption
 python -m src.clean.audio fgo
 python -m src.clean.langid fgo           # MLX on Apple Silicon, faster-whisper elsewhere
@@ -42,10 +43,10 @@ Every step is idempotent and caches its work, so steps can be rerun at any time.
 
 ## Schema
 
-`<game>_characters.jsonl`: one row per character. Fields: `char_uid` (`<game>:<source id>`), `game`, `name_ja/zh/en`, `gender` (female/male/other/unknown, taken from the source and never inferred), `gender_source`, `gender_alt`, `cv_name_ja`, `cv_name_zh`, `cv_uid`, `images[{path, kind: base|ascension|skin|other, outfit_name, source_url}]`, `source_urls`.
+`<game>_characters.jsonl`: one row per character. Fields: `char_uid` (`<game>:<source id>`), `game`, `name_ja/zh/en`, `gender` (female/male/other/unknown, taken from the source or a manual label and never inferred by a model), `gender_source`, `gender_alt`, `cv_name_ja`, `cv_name_zh`, `cv_uid`, `images[{path, kind: base|ascension|skin|other, outfit_name, source_url}]` (all outfits of a character, several images per character), `profile_texts[{lang, kind, condition, text, source_url}]` (official profile text kept verbatim; nothing is generated), `source_urls`.
 
 `<game>_clips.jsonl`: one row per voice line.
-- Source fields: `clip_uid`, `char_uid`, `outfit_name`, `category` (raw), `category_norm` (battle|daily|bond|system|other), `condition`, `is_legacy`, `text_ja`, `text_zh`, `text_source` (wiki|asr), `audio_path`, `audio_url`, `source_url`, `source_sha1`.
+- Source fields: `clip_uid`, `char_uid`, `outfit_name`, `category` (raw), `category_norm` (battle|daily|bond|system|other), `voice_scope` (character_vo|story; story dialogue only in the HF-based games), `condition`, `is_legacy`, `text_ja`, `text_zh`, `text_source` (wiki|gamedata|asr), `audio_path`, `audio_url`, `source_url`, `source_sha1`.
 - Quality fields: `duration_sec`, `sample_rate`, `orig_sample_rate`, `loudness_lufs_orig`, `wav24_path`, `wav16_path`, `audio_sha1`, `duplicate_of`, `lang`, `lang_prob`, `exclude`, `exclude_reasons`.
 
 Excluded clips stay in the manifest. Exclusion reasons: `too_short` (<1 s), `too_long` (>15 s), `battle_shout`, `non_japanese` (Whisper prob ≥ 0.5), `duplicate_audio`, `no_text`, `not_downloaded`, `no_audio_source`, `decode_error`.

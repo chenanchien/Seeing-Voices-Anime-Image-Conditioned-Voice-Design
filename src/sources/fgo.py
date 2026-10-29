@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 from src.common.http import PoliteSession
-from src.common.io import ROOT, load_config, write_jsonl
+from src.common.io import ROOT, load_config, read_jsonl, write_jsonl
 from src.sources.mediawiki import ask_all, file_infos, get_wikitext, strip_markup
 
 log = logging.getLogger("fgo")
@@ -55,6 +55,23 @@ def atlas_images(svt: dict) -> list[dict]:
     for img in imgs:
         img["path"] = str(RAW / "images" / f"{no:03d}" / img["source_url"].rsplit("/", 1)[1])
     return imgs
+
+
+def atlas_profile(svt: dict) -> list[dict]:
+    """Official profile text (JP). No dedicated appearance field exists; kept verbatim."""
+    no = svt["collectionNo"]
+    url = f"https://apps.atlasacademy.io/db/JP/servant/{no}"
+    texts = []
+    for c in svt["profile"].get("comments") or []:
+        if c.get("comment"):
+            texts.append({"lang": "ja", "kind": f"profile_{c['id']}", "condition": c.get("condType"),
+                          "text": c["comment"], "source_url": url})
+    stats = svt["profile"].get("stats") or {}
+    if stats.get("policy") or stats.get("personality"):
+        texts.append({"lang": "en", "kind": "alignment", "condition": None,
+                      "text": f"{stats.get('policy', '')} {stats.get('personality', '')}".strip(),
+                      "source_url": url})
+    return texts
 
 
 # ---------- Mooncell ----------
@@ -167,6 +184,18 @@ def mooncell_index(sess: PoliteSession, cfg: dict) -> dict[int, dict]:
 
 # ---------- main ----------
 
+def add_profiles() -> None:
+    """Add profile_texts to an existing characters manifest from the cached Atlas export only."""
+    cfg = load_config(GAME)
+    servants, _ = load_atlas(PoliteSession(), cfg)
+    by_no = {s["collectionNo"]: s for s in servants}
+    path = ROOT / "manifests" / "fgo_characters.jsonl"
+    chars = list(read_jsonl(path))
+    for c in chars:
+        c["profile_texts"] = atlas_profile(by_no[int(c["char_uid"].split(":")[1])])
+    write_jsonl(path, chars)
+
+
 def build(ids: list[int] | None = None) -> None:
     cfg = load_config(GAME)
     sess = PoliteSession(min_interval=cfg["rate_limit_sec"], host_intervals=cfg["host_rate_limit_sec"])
@@ -196,6 +225,7 @@ def build(ids: list[int] | None = None) -> None:
             "cv_name_zh": "、".join(m.get("cv_zh", [])) or None,
             "cv_uid": None,  # filled by src.clean.voice_actors
             "images": atlas_images(svt),
+            "profile_texts": atlas_profile(svt),
             "source_urls": [f"https://apps.atlasacademy.io/db/JP/servant/{no}"]
                            + ([f"https://fgo.wiki/w/{m['page']}"] if m else []),
         })
@@ -215,4 +245,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", type=int, nargs="*")
-    build(ap.parse_args().ids)
+    ap.add_argument("--profiles-only", action="store_true",
+                    help="only (re)fill profile_texts from the cached Atlas export")
+    a = ap.parse_args()
+    add_profiles() if a.profiles_only else build(a.ids)

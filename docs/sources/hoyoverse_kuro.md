@@ -2,7 +2,21 @@
 
 Surveyed 2026-10-28.
 
-## Verdict: needs your decision on licensing before any download.
+## Verdict: approved by the project owner ("the voice just needs to be Japanese"). Story dialogue is kept but labelled `voice_scope=story`.
+
+## Findings from the 3-character survey (芙宁娜/胡桃, 流萤/三月七, 今汐)
+
+- `ultemica/*` parquet shards are **sorted by speaker**, and speakers are simplified-Chinese names (matching BWIKI page names). We index the text columns of every shard with HTTP range reads (no audio), cached as `data/raw/<game>/hf_index.parquet`. Then only the shards containing playable characters are downloaded. Genshin: 161,156 rows / 2,988 speakers; Star Rail: 69,399 / 1,412; WuWa: 19,894 / 540.
+- Most rows are **story dialogue**. Character voice-over is identified from the filename:
+  - Genshin: `vo_<QUESTID>_…` = story; `vo_<char>_battle_*` / friendship = character VO.
+  - Star Rail: `chapter*` / `side*` = story; `archive_<char>_*` = character VO.
+  - WuWa: `ja_vo_<area>_main_*` etc. = story; `ja_vo_play_favor_word_<char>_*` = character VO.
+- Metadata:
+  - **Genshin / Star Rail**: BWIKI (`wiki.biligame.com/ys`, `/sr`) via `api.php?action=parse`, which robots allows. `Category:角色` lists 134 / 102 characters. Fields: `日文CV` (zh spelling for ys, often JP spelling for sr), `性别`, `介绍`, `角色详细`, `角色故事1-5`. Art comes from the parsed page HTML (`<名>立绘*.png` on patchwiki.biligame.com), so no File: lookups are needed.
+  - **WuWa**: BWIKI `/mc/` is **disallowed** by robots. Use **encore.moe** instead (robots: allow all). `api.encore.moe/ja/character/<id>` has JP name, `favorRole.CVNameJp`, `favorRole.Sex`, introduction, skins with stand art, and `Words[].VoiceJa` (JP character voice audio). `api.encore.moe/zh-Hans/character` gives the zh names that join with HF speakers.
+- Multi-CV entries exist (e.g. 流萤 `楠木ともり&笠間淳`, i.e. Firefly + SAM) → needs_review.
+
+## Original licensing note
 
 ### Hugging Face datasets (audio)
 

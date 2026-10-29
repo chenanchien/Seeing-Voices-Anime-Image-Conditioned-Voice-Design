@@ -1,0 +1,25 @@
+game: bluearchive
+rate_limit_sec: 1.0
+host_rate_limit_sec: {}
+
+schaledb:
+  data: https://schaledb.com/data/{lang}/{file}
+  audio: https://r2.schaledb.com/voice/{clip}
+  portrait: https://schaledb.com/images/student/portrait/{id}.webp
+  student_page: https://schaledb.com/student/{path}
+  name_langs: {en: name_en, cn: name_zh}
+
+# Every BA student is female (confirmed by the project owner; SchaleDB has no gender field).
+gender: {value: female, source: manual}
+
+# (voice bucket, group prefix) -> category_norm; first match wins, prefix "" matches all
+category_rules:
+  - {bucket: Battle, prefix: "", norm: battle}
+  - {bucket: Normal, prefix: CafeIdle, norm: daily}
+  - {bucket: Normal, prefix: RelationshipUp, norm: bond}
+  - {bucket: Normal, prefix: "", norm: system}
+  - {bucket: Lobby, prefix: "", norm: daily}
+  - {bucket: Event, prefix: "", norm: other}
+
+battle_shout_groups: [ExSkill, CommonSkill, BattleMove, BattleCovered, BattleDefense, BattleRetire,
+                      BattleBuffed, BattleBuffSelf, BattleRecovery, BattleTacticalAction, Interaction]

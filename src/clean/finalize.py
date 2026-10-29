@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import re
 
 from src.clean.audio import stats_path
 from src.common.io import ROOT, read_jsonl, write_jsonl
@@ -17,6 +18,16 @@ log = logging.getLogger("clean.finalize")
 
 MIN_SEC, MAX_SEC = 1.0, 15.0
 LANG_MIN_PROB = 0.5  # only exclude as non-Japanese when Whisper is reasonably sure
+LANG_MIN_SEC = 2.0   # Whisper language ID is unreliable on short interjections
+KANA = re.compile(r"[\u3040-\u30ff]")
+
+
+def needs_asr(clip: dict) -> bool:
+    """No source transcript, or a source 'JP' text that is really untranslated Chinese."""
+    text = clip.get("text_ja") if clip.get("text_source") != "asr" else clip.get("text_ja_source")
+    if clip.get("text_source") in (None, "asr") and not clip.get("text_ja_source"):
+        return True
+    return bool(text) and len(text) >= 8 and not KANA.search(text)
 
 QUALITY_FIELDS = ["duration_sec", "sample_rate", "orig_sample_rate", "orig_duration_sec",
                   "loudness_lufs_orig", "trimmed_lead_sec", "trimmed_tail_sec",
@@ -58,9 +69,15 @@ def run(game: str) -> None:
 
         clip["lang"] = lg["lang"] if lg else None
         clip["lang_prob"] = lg["lang_prob"] if lg else None
+        clip["lang_uncertain"] = False
         if lg and lg["lang"] != "ja" and lg["lang_prob"] >= LANG_MIN_PROB:
-            reasons.append("non_japanese")
-        if clip.get("text_source") != "wiki" and lg and lg.get("asr_text_ja"):
+            if (st.get("duration_sec") or 0) >= LANG_MIN_SEC:
+                reasons.append("non_japanese")
+            else:
+                clip["lang_uncertain"] = True
+        if needs_asr(clip) and lg and lg.get("asr_text_ja"):
+            if clip.get("text_source") not in (None, "asr"):
+                clip["text_ja_source"] = clip["text_ja"]  # keep the mismatched source text
             clip["text_ja"], clip["text_source"] = lg["asr_text_ja"], "asr"
         if not clip.get("text_ja"):
             reasons.append("no_text")

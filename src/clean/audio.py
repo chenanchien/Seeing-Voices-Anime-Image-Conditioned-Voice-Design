@@ -1,4 +1,6 @@
-"""Audio cleaning: mono, trim head/tail silence, loudness-normalize, write 24 kHz + 16 kHz WAV.
+"""Audio cleaning: mono, trim head/tail silence, loudness-normalize, write 24 kHz + 16 kHz audio.
+
+Output is 16-bit FLAC (lossless, ~half the size of WAV; soundfile reads it like WAV).
 
 Results are cached in data/processed/<game>/audio_stats.jsonl (one row per clip_uid), so
 reruns only process new clips.
@@ -78,7 +80,7 @@ def process(args: tuple[str, str, str, str]) -> dict:
     y, loud = normalize(y, SR_MAIN)
     for path, data, rate in ((out24, y, SR_MAIN), (out16, soxr.resample(y, SR_MAIN, SR_SPK), SR_SPK)):
         (ROOT / path).parent.mkdir(parents=True, exist_ok=True)
-        sf.write(ROOT / path, data, rate, subtype="PCM_16")
+        sf.write(ROOT / path, data, rate, format="FLAC", subtype="PCM_16")
     return row | {
         "duration_sec": round(len(y) / SR_MAIN, 3), "sample_rate": SR_MAIN,
         "trimmed_lead_sec": round(lead, 3), "trimmed_tail_sec": round(tail, 3),
@@ -102,7 +104,7 @@ def run(game: str, workers: int = 6) -> None:
         sub = clip["char_uid"].split(":", 1)[1]
         base = f"data/processed/{game}"
         todo.append((clip["clip_uid"], clip["audio_path"],
-                     f"{base}/wav24k/{sub}/{stem}.wav", f"{base}/wav16k/{sub}/{stem}.wav"))
+                     f"{base}/wav24k/{sub}/{stem}.flac", f"{base}/wav16k/{sub}/{stem}.flac"))
     log.info("%s: %d clips to process (%d cached)", game, len(todo), len(done))
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     with open(cache_path, "a", encoding="utf-8") as f, ProcessPoolExecutor(workers) as ex:

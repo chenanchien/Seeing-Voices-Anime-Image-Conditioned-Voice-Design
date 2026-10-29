@@ -2,7 +2,7 @@
 
 Surveyed 2026-10-28 on 3 students: アル (10000) and ホシノ (3 styles: base / 水着 / 臨戦).
 
-## Verdict: feasible from SchaleDB alone. Adapter not built yet (waiting for go-ahead).
+## Verdict: feasible from SchaleDB alone. Adapter built (`src/sources/bluearchive.py`). Pilot: 3 characters, 619 clips, 440 usable.
 
 ## Sources
 
@@ -16,6 +16,7 @@ Surveyed 2026-10-28 on 3 students: アル (10000) and ホシノ (3 styles: base 
 
 ## Notes
 
-- Each style (水着, 臨戦, …) is a separate student `Id` sharing `PersonalName`/`CharacterVoice`. Model this as one character per (FamilyName, PersonalName) with styles as outfits, or one row per style plus `outfit_name`. **Decision needed.**
-- **No gender field in SchaleDB.** Under the "don't infer" rule, gender stays `unknown` and the students go on the manual-labelling list.
+- Each style (水着, 臨戦, …) is a separate student `Id`. **Decision (project owner):** one character per (FamilyName, PersonalName). Every style's portrait goes into `images`; style voice lines carry `outfit_name`. 151 characters / 278 styles.
+- **No gender field in SchaleDB.** The project owner confirmed all students are female → `gender=female`, `gender_source=manual`.
+- Profile text: `ProfileIntroduction` (per style), `Hobby`, plus school/club/age/height as `basic_info`.
 - bluearchive.wiki: robots.txt disallows `/w/` (incl. `api.php`) except `action=mobileview`. Not needed, since SchaleDB covers everything.

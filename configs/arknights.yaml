@@ -1,0 +1,25 @@
+game: arknights
+rate_limit_sec: 1.0
+host_rate_limit_sec:
+  prts.wiki: 1.5
+
+gamedata:
+  # JP server tables (text, CV, gender, profile); zh table only for PRTS page/file names
+  ja: https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData_YoStar/main/ja_JP/gamedata/excel/{file}
+  zh: https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/{file}
+
+prts:
+  api: https://prts.wiki/api.php
+  audio: https://torappu.prts.wiki/assets/audio/voice/{asset}.wav   # asset lowercased
+  page: https://prts.wiki/w/{name}
+
+# placeType -> category_norm (unlockType FAVOR -> bond overrides)
+category_rules:
+  battle: [BATTLE_, SQUAD, THREE_STAR, FOUR_STAR, TWO_STAR, LOSE]
+  system: [GACHA, LEVEL_UP, EVOLVE_, LOADING_PANEL]
+  daily: [HOME_, GREETING, BUILDING_, NEW_YEAR, BIRTHDAY, ANNIVERSARY]
+  default: other
+
+battle_shout_place_types: [BATTLE_SELECT, BATTLE_PLACE, BATTLE_SKILL_]
+
+gender_map: {女: female, 女性: female, 男: male, 男性: male}

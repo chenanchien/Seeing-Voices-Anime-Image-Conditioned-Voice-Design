@@ -1,14 +1,16 @@
 # Source survey: Arknights (JP voice)
 
-Surveyed 2026-10-28 on 3 operators: アーミヤ (char_002_amiya), チェン (char_017_huang), エクシア (char_103_angel).
+Surveyed 2026-10-28 on 3 operators: アーミヤ (char_002_amiya), ブレイズ (char_017_huang), エクシア (char_103_angel).
 
-## Verdict: feasible. Adapter not built yet (waiting for go-ahead).
+## Verdict: feasible. Adapter built (`src/sources/arknights.py`); PRTS used only for the art list.
 
 ## Sources
 
 | What | Source | Access |
 |---|---|---|
-| Voice lines: title, JP text (+ zh/en/ko), audio file, trigger type, unlock condition | PRTS `https://prts.wiki/api.php` `action=parse&prop=wikitext` on `<干员名>/语音记录` | robots.txt does not disallow `/api.php` for `*`. Licence CC BY-NC-SA 4.0 (`siteinfo.rightsinfo`). |
+| Voice lines (**used**): JP text, title, placeType, unlockType, asset | JP game data `charword_table.json` → `charWords` (15,817 lines; 1,657 skin/patch-form voices with `wordKey != charId`) | GitHub raw |
+| Gender + profile text (**used**) | JP `handbook_info_table.json`: `【性別】` in 基礎情報; 個人履歴, 健康診断, archives | GitHub raw |
+| Voice lines (alternative, not used) | PRTS `https://prts.wiki/api.php` `action=parse&prop=wikitext` on `<干员名>/语音记录` | robots.txt does not disallow `/api.php` for `*`. Licence CC BY-NC-SA 4.0 (`siteinfo.rightsinfo`). |
 | JP audio | `https://torappu.prts.wiki/assets/audio/<日语 path>/<file lowercased>`, e.g. `voice/char_002_amiya/cn_001.wav` | No robots rules. **Filename must be lowercased** (`CN_001.wav` → 404). WAV, ~270 KB/line. |
 | CV (original Japanese name) | `Kengxxiao/ArknightsGameData_YoStar` → `ja_JP/gamedata/excel/charword_table.json` → `voiceLangDict[charId].dict.JP.cvName` | GitHub raw, one 10 MB file. 395 voice sets. No repo licence (game data © Hypergryph/Yostar). |
 | Gender | PRTS operator page `|性别=女` | |

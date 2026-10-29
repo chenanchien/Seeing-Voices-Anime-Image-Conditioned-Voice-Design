@@ -16,6 +16,7 @@ import platform
 import soundfile as sf
 
 from src.clean.audio import stats_path
+from src.clean.finalize import needs_asr
 from src.common.io import ROOT, read_jsonl
 
 log = logging.getLogger("clean.langid")
@@ -59,10 +60,12 @@ class FasterWhisper:
 def run(game: str, backend: str | None = None, batch: int = 16) -> None:
     backend = backend or ("mlx" if platform.machine() == "arm64" and platform.system() == "Darwin" else "faster")
     out_path = ROOT / "data" / "processed" / game / "langid.jsonl"
-    done = {r["clip_uid"] for r in read_jsonl(out_path)}
+    clips_by_uid = {c["clip_uid"]: c for c in read_jsonl(ROOT / "manifests" / f"{game}_clips.jsonl")}
+    cached = {r["clip_uid"]: r for r in read_jsonl(out_path)}
+    # redo clips that now need ASR but were checked without it
+    done = {u for u, r in cached.items() if "asr_text_ja" in r or not needs_asr(clips_by_uid.get(u, {}))}
     stats = {r["clip_uid"]: r for r in read_jsonl(stats_path(game)) if "error" not in r}
-    clips = [c for c in read_jsonl(ROOT / "manifests" / f"{game}_clips.jsonl")
-             if c["clip_uid"] in stats and c["clip_uid"] not in done]
+    clips = [c for c in clips_by_uid.values() if c["clip_uid"] in stats and c["clip_uid"] not in done]
     log.info("%s: %d clips to check (%d cached), backend=%s", game, len(clips), len(done), backend)
     if not clips:
         return
@@ -74,7 +77,7 @@ def run(game: str, backend: str | None = None, batch: int = 16) -> None:
             for clip, audio, (lang, prob) in zip(chunk, audios, model.detect(audios)):
                 row = {"clip_uid": clip["clip_uid"], "lang": lang, "lang_prob": round(float(prob), 3),
                        "whisper_model": f"{MODEL}/{backend}"}
-                if clip.get("text_source") != "wiki":  # text_ja missing on the wiki
+                if needs_asr(clip):
                     row["asr_text_ja"] = model.transcribe(audio)
                 f.write(json.dumps(row, ensure_ascii=False) + "\n")
             f.flush()
