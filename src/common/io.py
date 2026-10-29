@@ -23,7 +23,10 @@ def read_jsonl(path: str | Path) -> Iterator[dict]:
     with open(path, encoding="utf-8") as f:
         for line in f:
             if line.strip():
-                yield json.loads(line)
+                try:
+                    yield json.loads(line)
+                except json.JSONDecodeError:  # last line cut off by a shutdown: that clip is redone
+                    continue
 
 
 def write_jsonl(path: str | Path, rows: Iterable[dict]) -> int:

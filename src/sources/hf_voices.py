@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import io
 import logging
+import os
 from pathlib import Path
 
 import pyarrow as pa
@@ -60,8 +61,11 @@ def extract(repo: str, wanted: dict[str, list[tuple[int, str]]]) -> dict[str, in
         for row, path in todo:
             try:
                 y, sr = sf.read(io.BytesIO(audio[row].as_py()["bytes"]), dtype="int16")
-                (ROOT / path).parent.mkdir(parents=True, exist_ok=True)
-                sf.write(ROOT / path, y, sr, format="FLAC", subtype="PCM_16")
+                dest = ROOT / path
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                tmp = dest.with_suffix(".part.flac")  # never leave a half-written file at dest
+                sf.write(tmp, y, sr, format="FLAC", subtype="PCM_16")
+                os.replace(tmp, dest)
                 stats["ok"] += 1
             except Exception as e:  # corrupt clip: record and continue
                 log.warning("%s row %d: %s", shard, row, e)
