@@ -53,3 +53,21 @@ Consequences:
 - Genshin / Star Rail metadata (CV, gender, profile, art) has no working source right now. The pilot manifests from before the block (芙宁娜/胡桃/钟离, 流萤/丹恒) are complete, but the full run can't use BWIKI.
 - `name_ja` was never available from BWIKI (no Japanese-name field).
 - WuWa is unaffected (encore.moe). WuWa pilot extraction verified: 44.1 kHz mono, mean 7.4 s, ~180 KB/clip raw FLAC.
+
+## 2026-10-28: HoYoLAB wiki survey (replacement for BWIKI)
+
+Surveyed on フリーナ (Genshin) and 星神★アッハ (Star Rail). **Feasible.** robots.txt on `wiki.hoyolab.com` is `User-Agent: *` with no disallows; the API hosts have no robots.txt.
+
+| What | Endpoint |
+|---|---|
+| Character list | `POST https://sg-wiki-api.hoyolab.com/hoyowiki/{genshin,hsr}/wapi/get_entry_page_list`, body `{"filters":[],"menu_id":"2"(genshin) / "104"(hsr),"page_num":N,"page_size":30,"use_es":true}`. Headers `x-rpc-language: ja-jp` (or `zh-cn` for the names that join HF speakers) and `x-rpc-wiki_app: hsr` for Star Rail. Genshin 132 entries, Star Rail 94 (incl. outfit entries like 「アベンチュリン・波と戯れる夏」 and the FGO collab). |
+| Character page | `GET https://sg-wiki-api-static.hoyolab.com/hoyowiki/{game}/wapi/entry_page?entry_page_id=ID` |
+
+Modules on the JP page:
+- **ステータス / 基本情報**: 和名/英名 (fills `name_ja`), **日本語 CV in the original spelling** (水瀬いのり, 戸松遥), plus zh/en/ko CV.
+- **ギャラリー**: 原画 (official art) plus distributed illustrations.
+- **ストーリー**: キャラクター詳細 and キャラクターストーリー1–5 (JP profile text).
+- **ボイス**: official character voice lines (Furina: 71) with JP text and per-language audio URLs (`upload-static.hoyoverse.com/hoyolab-wiki-voice/...mp3`, 日本語 included). These are the profile/friendship voice-overs missing from the HF Genshin dump.
+- **No gender field** in either game (filters: rarity, region/path, element, weapon only).
+
+Plan: metadata + character voice-over from HoYoLAB (JP); story dialogue from HF ultemica, joined on the zh-cn name. Gender stays `unknown` unless labelled manually.
