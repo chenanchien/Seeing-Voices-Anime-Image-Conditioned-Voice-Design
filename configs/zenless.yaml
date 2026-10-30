@@ -1,0 +1,32 @@
+game: zenless
+rate_limit_sec: 1.0
+host_rate_limit_sec:
+  sg-wiki-api.hoyolab.com: 1.0
+
+# Audio: HF simon3000/zenless-voice, per-speaker zips (<hash>.wav + <hash>.json metadata).
+# Only voiceType "char" (agent voice-over: lobby, battle, bond lines) is used; it has no
+# transcription and no in-game file name, so text comes from the Whisper ASR fallback.
+# Story types (Galgame, Accompany, Level, ...) are skipped (owner decision 2026-10-28).
+hf_repo: simon3000/zenless-voice
+hf_index: data/raw/zenless/hf_index.parquet   # text columns of every parquet shard
+archives: speaker-archives/README.md
+voice_types: [char]
+
+# HoYoLAB wiki: JP name, gender (性別), JP CV, official profile text, agent art
+metadata: {provider: hoyolab}
+hoyolab: {app: zzz, menu_id: "8"}
+
+# HF speaker code -> HoYoLAB English name. Codes that equal a name token are matched
+# automatically; these are the in-game nicknames / codes that are not.
+speaker_map:
+  anbi: Anby Demara
+  aokaku: Soukaku          # 蒼角
+  xiaozhao: Zhao           # 照
+  billy: Billy Kid
+  spbilly: Starlight - Billy
+  lucy: Luciana de Montefio
+  rina: Alexandrina Sebastiane
+# Codes without proof of identity: left out and listed in docs/sources/zenless.md
+speaker_unresolved: [Summer, azural, brujas, clara, lisa, longinus, norano, tsubaki, unagi, zhenzhen]
+# speaker code -> archive name when they differ
+archive_alias: {hugovlad: Hugo}

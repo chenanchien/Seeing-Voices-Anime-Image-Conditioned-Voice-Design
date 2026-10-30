@@ -1,0 +1,48 @@
+game: girlsfrontline
+rate_limit_sec: 1.0
+# iopwiki.com robots.txt: Crawl-delay 20 (articles and /images/ allowed; api.php?action= is not)
+host_rate_limit_sec:
+  iopwiki.com: 20.0
+
+# Audio + JP line text + CV (romaji): deepghs dump of the IOP Wiki JP voice files.
+# voices.tar is uncompressed and voices.json gives each member's data offset.
+hf_tar: {repo: deepghs/girlsfrontline_voices_jp, file: voices.tar, offsets: voices.json, table: table.parquet}
+
+# Art (gallery "Main artworks", full artworks only) and CV Japanese names
+doll_page: https://iopwiki.com/wiki/{title}
+va_page: https://iopwiki.com/wiki/Voice_Actor:{title}
+image_base: https://iopwiki.com
+
+# Every T-Doll is female (confirmed by the project owner, 2026-10-30)
+gender: {value: female, source: manual}
+
+# voice_group prefix -> clip outfit (the alternate voice sets of one doll)
+voice_set_outfit: {MOD3: Neural Upgrade, "Children's Day": Children's Day, "Children's": Children's Day}
+
+# voice_title -> category_norm; unlisted titles -> other (holiday lines etc.)
+category_norm:
+  Secretary: daily
+  Secretary (post OATH): bond
+  OATH: bond
+  Greeting: daily
+  Phrase: daily
+  Title: system
+  Loading: system
+  Tip: system
+  Acquisition: system
+  T-Doll Produced: system
+  Enhancement: system
+  Restoration: system
+  Joining an echelon: system
+  Dummy-linking: system
+  Logistics (start): system
+  Logistics (end): system
+  Skill activation: battle
+  Autobattle: battle
+  Heavily damaged: battle
+  Starting a combat mission: battle
+  Starting a battle: battle
+  MVP: battle
+  Retreat: battle
+  Defense: battle
+  Attack: battle

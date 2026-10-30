@@ -137,7 +137,8 @@ def hoyolab_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) 
                 voices.append({"id": v.get("id"), "title": plain(v.get("title")), "text": body.strip(),
                                "condition": cond.strip() or None, "url": ja})
         out.append({"id": str(eid), "name_zh": name_zh, "name_ja": name_ja or None, "name_en": name_en or None,
-                    "gender_raw": None, "cv_name_ja": cv, "images": images, "profile_texts": profiles,
+                    "gender_raw": base.get("性別"),  # 性別: zzz only
+                    "cv_name_ja": cv, "images": images, "profile_texts": profiles,
                     "voice_lines": voices, "source_urls": [url]})
         log.info("%s %s / %s: %d images, %d stories, %d JP voice lines", eid, name_zh, name_ja,
                  len(images), len(profiles), len(voices))

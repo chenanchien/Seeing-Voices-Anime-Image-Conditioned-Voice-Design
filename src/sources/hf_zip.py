@@ -1,4 +1,4 @@
-"""Extract single members from a large zip on Hugging Face with HTTP range requests.
+"""Extract single members from a large zip (or indexed tar) on Hugging Face with HTTP range requests.
 
 The central directory is read once and cached as an index (name, local header offset,
 compressed size, method). Wanted members are sorted by offset and fetched in contiguous
@@ -27,6 +27,11 @@ log = logging.getLogger("hf_zip")
 SPAN_BYTES = 64 << 20
 MAX_GAP = 1 << 20  # merge members into one span when the gap between them is small
 HEADER_SLACK = 30 + 2048  # local header + name + extra field (names here are < 200 bytes)
+
+
+def index_path(game: str, file: str) -> Path:
+    """Where src.download and the adapters cache the index of `file` (may contain '/')."""
+    return ROOT / "data" / "raw" / game / f"{file.replace('/', '__')}.index.jsonl"
 
 
 def resolve_url(repo: str, file: str) -> str:
@@ -97,16 +102,45 @@ def build_index(repo: str, file: str, dest: Path) -> dict[str, dict]:
     return index
 
 
+def _spans(entries: list[tuple[dict, object]]) -> list[list]:
+    """Group (index entry, payload) by offset into [start, end, items] ranges of <= SPAN_BYTES."""
+    spans: list[list] = []
+    for e, p in sorted(entries, key=lambda t: t[0]["offset"]):
+        end = e["offset"] + HEADER_SLACK + e["csize"]  # member end is estimated (name + extra bytes)
+        if spans and e["offset"] - spans[-1][1] <= MAX_GAP and end - spans[-1][0] <= SPAN_BYTES:
+            spans[-1][1] = max(spans[-1][1], end)
+            spans[-1][2].append((e, p))
+        else:
+            spans.append([e["offset"], end, [(e, p)]])
+    return spans
+
+
 def read_members(repo: str, file: str, index: dict[str, dict], names: list[str]) -> dict[str, bytes]:
-    """Small helper for text members (e.g. a transcript list)."""
+    """Raw bytes of small members (transcripts, per-clip JSON), fetched in spans."""
     out, sess, url = {}, _session(), resolve_url(repo, file)
-    for n in names:
-        e = index[n]
-        out[n] = _member_bytes(_get_range(sess, url, e["offset"], e["offset"] + HEADER_SLACK + e["csize"]), 0, e)
+    for start, end, items in _spans([(index[n], n) for n in names]):
+        buf = _get_range(sess, url, start, end - 1)
+        for e, n in items:
+            out[n] = _member_bytes(buf, e["offset"] - start, e)
     return out
 
 
+def tar_index(offsets: dict[str, dict], dest: Path) -> dict[str, dict]:
+    """Index for an uncompressed tar whose dataset ships a {name: {offset, size}} table (deepghs
+    style); offset is the data start, so members are plain byte slices (method "tar")."""
+    if not dest.exists():
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        with open(dest.with_suffix(".tmp"), "w", encoding="utf-8") as f:
+            for name, e in offsets.items():
+                f.write(json.dumps({"name": name, "offset": e["offset"], "csize": e["size"],
+                                    "method": "tar"}, ensure_ascii=False) + "\n")
+        os.replace(dest.with_suffix(".tmp"), dest)
+    return build_index("", "", dest)
+
+
 def _member_bytes(buf: bytes, at: int, e: dict) -> bytes:
+    if e["method"] == "tar":
+        return buf[at:at + e["csize"]]
     if buf[at:at + 4] != b"PK\x03\x04":
         raise ValueError(f"bad local header for {e['name']}")
     name_len, extra_len = struct.unpack("<HH", buf[at + 26:at + 30])
@@ -130,15 +164,7 @@ def extract(repo: str, file: str, index: dict[str, dict], wanted: list[tuple[str
             stats["failed"] += 1
         else:
             todo.append((index[name], path))
-    todo.sort(key=lambda t: t[0]["offset"])
-    spans: list[list] = []
-    for e, path in todo:  # member end is estimated: the local header adds name + extra bytes
-        end = e["offset"] + HEADER_SLACK + e["csize"]
-        if spans and e["offset"] - spans[-1][1] <= MAX_GAP and end - spans[-1][0] <= SPAN_BYTES:
-            spans[-1][1] = max(spans[-1][1], end)
-            spans[-1][2].append((e, path))
-        else:
-            spans.append([e["offset"], end, [(e, path)]])
+    spans = _spans(todo)
     sess, url = _session(), resolve_url(repo, file)
     for k, (start, end, items) in enumerate(spans, 1):
         buf = _get_range(sess, url, start, end - 1)
