@@ -40,6 +40,8 @@ def collect_items(game: str, limit_chars: int | None, only: str | None) -> list[
     if only in (None, "image"):
         for c in chars:
             for img in c["images"]:
+                if img.get("assembled_by"):  # built from several source files by its own step
+                    continue
                 items.append({"url": img["source_url"], "path": img["path"], "sha1": None})
     if only in (None, "audio"):
         for clip in read_jsonl(ROOT / "manifests" / f"{game}_clips.jsonl"):

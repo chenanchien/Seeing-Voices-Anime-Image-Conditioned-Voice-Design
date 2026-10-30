@@ -1,0 +1,52 @@
+game: azurlane
+rate_limit_sec: 1.0
+host_rate_limit_sec: {}
+
+# Audio + official JP line text: HF dump of algwiki.moe voice files (617 ships)
+hf_zip: {repo: TLME/AzurLane-voice-transcription, file: Dateset.zip}
+
+# JP game data: names, skins (painting key, outfit name, outfit description), CV
+gamedata: https://raw.githubusercontent.com/AzurLaneTools/AzurLaneData/main/JP/{path}
+gamedata_files:
+  statistics: sharecfgdata/ship_data_statistics.json
+  skins: ShareCfg/ship_skin_template.json
+  actors: ShareCfg/voice_actor_CN.json   # despite the name, JP data holds JP CV names
+
+# Art: algwiki.moe serves the game's painting assets per skin (robots.txt: none). The atlas
+# must be reassembled: python -m src.sources.azurlane_paint (port of algwiki's compositor)
+painting_base: https://algwiki.moe/assets
+painting: https://algwiki.moe/assets/painting/{painting}.json
+ship_page: https://algwiki.moe/ships/{slug}.html
+
+# Gender: not in any source. Left unknown until the project owner decides.
+gender: {value: unknown, source: null}
+
+# voice key (skin suffix removed) -> category_norm; unlisted -> other
+category_norm:
+  get: system
+  login: daily
+  detail: daily
+  main_1: daily
+  main_2: daily
+  main_3: daily
+  touch_1: daily
+  touch_2: daily
+  touch_head: daily
+  home: daily
+  mail: system
+  task: system
+  mission_complete: system
+  expedition: system
+  upgrade: system
+  profile: other
+  feeling1: bond
+  feeling2: bond
+  feeling3: bond
+  feeling4: bond
+  feeling5: bond
+  propose: bond
+  warcry: battle
+  mvp: battle
+  lose: battle
+  skill: battle
+  hp: battle
