@@ -20,6 +20,7 @@ from urllib.parse import urlsplit
 
 from src.common.http import PoliteSession, RobotsDisallowed
 from src.common.io import ROOT, file_hash, load_config, read_jsonl
+from src.sources import hf_zip
 from src.sources.hf_voices import extract as hf_extract
 
 log = logging.getLogger("download")
@@ -90,8 +91,13 @@ def run(game: str, limit_chars: int | None = None, only: str | None = None) -> d
                          host_intervals=cfg.get("host_rate_limit_sec", {}))
     by_host: dict[str, list[dict]] = defaultdict(list)
     hf: dict[str, dict[str, list]] = defaultdict(lambda: defaultdict(list))  # repo -> shard -> rows
+    hfzip: dict[tuple, list] = defaultdict(list)  # (repo, zip file) -> [(member, path)]
     for it in collect_items(game, limit_chars, only):
-        if it["url"].startswith("hf://"):  # hf://<owner>/<repo>/<shard>#<row>
+        if it["url"].startswith("hfzip://"):  # hfzip://<owner>/<repo>/<file.zip>#<member>
+            repo_file, member = it["url"][8:].split("#", 1)
+            repo, file = repo_file.rsplit("/", 1)
+            hfzip[(repo, file)].append((member, it["path"]))
+        elif it["url"].startswith("hf://"):  # hf://<owner>/<repo>/<shard>#<row>
             repo_shard, row = it["url"][5:].split("#")
             repo, shard = repo_shard.rsplit("/", 1)
             hf[repo][shard].append((int(row), it["path"]))
@@ -100,6 +106,10 @@ def run(game: str, limit_chars: int | None = None, only: str | None = None) -> d
     for repo, wanted in hf.items():
         log.info("extracting from %s: %d shards", repo, len(wanted))
         log.info("hf done: %s", hf_extract(repo, wanted))
+    for (repo, file), wanted in hfzip.items():
+        index = hf_zip.build_index(repo, file, ROOT / "data" / "raw" / game / f"{file}.index.jsonl")
+        log.info("extracting %d members from %s/%s", len(wanted), repo, file)
+        log.info("hfzip done: %s", hf_zip.extract(repo, file, index, wanted))
 
     def worker(host: str) -> dict:
         stats: dict[str, int] = defaultdict(int)

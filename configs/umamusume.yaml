@@ -1,0 +1,43 @@
+game: umamusume
+rate_limit_sec: 1.0
+host_rate_limit_sec: {}
+
+# Audio + official line text: HF client dump (character system voices only; story skipped)
+hf_zip: {repo: Plachta/Umamusume-voice-text-pairs, file: umavoice.zip, transcript: output.txt,
+         prefix: character_system_text/}
+
+# char_id -> name / CV (one JSON file)
+gametora:
+  manifest: https://gametora.com/data/manifests/umamusume.json
+  data: https://gametora.com/data/umamusume/{key}.{hash}.json
+
+# Official site: profile text, CV, outfit art (Nuxt payload JSON per character)
+official:
+  list: https://umamusume.jp/character/
+  payload: https://umamusume.jp/character/{slug}/_payload.json
+  page: https://umamusume.jp/character/{slug}
+  # GameTora uses titles for some staff; the official site uses full names
+  name_alias: {秋川理事長: 秋川やよい, 乙名史記者: 乙名史悦子, 桐生院トレーナー: 桐生院葵}
+
+# Every character in the voice set is female (confirmed by the project owner, 2026-10-30)
+gender: {value: female, source: manual}
+
+# snd_voi_<category>_<id> -> category_norm; unlisted categories -> other
+category_norm:
+  home: daily
+  training: daily
+  outgame: bond
+  title: system
+  gacha: system
+  shop: system
+  transfer: system
+  race: battle
+  ratingrace: battle
+  champions: battle
+  customrace: battle
+  dailyrace: battle
+  ultimaterace: battle
+  roommatch: battle
+
+# visual title -> image kind; unlisted titles -> other
+image_kind: {制服: base, 勝負服: skin}
