@@ -1,6 +1,6 @@
 # Pipeline status
 
-Last updated: 2026-10-29 12:00, after the Mac crashed (kernel watchdog panic at ~05:18) and rebooted. Nothing is running.
+Last updated: 2026-10-30 10:55. Pipelines restarted at 10:12 with `scripts/resume.sh`. Uma Musume and Azur Lane were added and their runs started separately; resume.sh covers them too.
 
 ## How to resume
 
@@ -30,6 +30,15 @@ Crash damage check: 0 `.part` files, and all 27,816 files written just before th
 | WuWa | **done**: 1,920 clips, 1,642 usable | done | done | PIPELINE_DONE |
 
 FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profiles-only` (in resume.sh).
+
+## Added 2026-10-30
+
+| Game | Characters | Clips | Notes |
+|---|---|---|---|
+| Uma Musume | 115 | 19,635 | HF zip (range extraction), official profiles and art, all female (owner) |
+| Azur Lane | 617 | 27,998 | HF zip, AzurLaneData CV, paintings assembled by `src.sources.azurlane_paint`; gender unknown (pending owner) |
+
+Genshin (126 characters / 13,886 clips) and Star Rail (89 / 4,977) adapters finished on 2026-10-30.
 
 ## Decisions (project owner, 2026-10-28)
 
