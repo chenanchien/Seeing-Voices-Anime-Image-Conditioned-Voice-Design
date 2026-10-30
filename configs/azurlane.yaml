@@ -18,8 +18,8 @@ painting_base: https://algwiki.moe/assets
 painting: https://algwiki.moe/assets/painting/{painting}.json
 ship_page: https://algwiki.moe/ships/{slug}.html
 
-# Gender: not in any source. Left unknown until the project owner decides.
-gender: {value: unknown, source: null}
+# Every ship is female (confirmed by the project owner, 2026-10-30)
+gender: {value: female, source: manual}
 
 # voice key (skin suffix removed) -> category_norm; unlisted -> other
 category_norm:

@@ -36,7 +36,7 @@ FGO `profile_texts` are added at the end by `python -m src.sources.fgo --profile
 | Game | Characters | Clips | Notes |
 |---|---|---|---|
 | Uma Musume | 115 | 19,635 | HF zip (range extraction), official profiles and art, all female (owner) |
-| Azur Lane | 617 | 27,998 | HF zip, AzurLaneData CV, paintings assembled by `src.sources.azurlane_paint`; gender unknown (pending owner) |
+| Azur Lane | 617 | 27,998 | HF zip, AzurLaneData CV, paintings assembled by `src.sources.azurlane_paint`; all female (manual, owner 2026-10-30) |
 
 Genshin (126 characters / 13,886 clips) and Star Rail (89 / 4,977) adapters finished on 2026-10-30.
 

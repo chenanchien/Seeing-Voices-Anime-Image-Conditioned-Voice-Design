@@ -20,4 +20,4 @@ The owner asked to try the Hugging Face dump first. It works, so azurlane.koumak
 - **Art**: algwiki.moe (no robots.txt) serves the game's painting assets: texture atlas + mesh + layer JSON + face overlays.
   - `src/sources/azurlane_paint.py` is a Python port of algwiki's own compositor (`js/azurlane_compositor.js`) and writes the assembled full-body PNG.
   - 1,895 skins in total. About 5 cached requests per skin at 1 req/s, so ~3 h.
-- **Gender**: no source field. Left `unknown` pending the owner's decision.
+- **Gender**: no source field. All ships are labelled `female`, `gender_source: manual` (owner decision, 2026-10-30).
