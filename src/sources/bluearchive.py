@@ -54,7 +54,9 @@ def build(names: list[str] | None = None) -> None:
 
     groups: dict[tuple, list[dict]] = defaultdict(list)
     for s in students.values():
-        groups[(s["FamilyName"], s["PersonalName"])].append(s)
+        s.update(cfg["style_override"].get(s["Id"], {}))
+        # SchaleDB sometimes pads a name ("豊見 " on one style): strip it so styles still merge
+        groups[(s["FamilyName"].strip(), s["PersonalName"].strip())].append(s)
 
     chars, clips = [], []
     for (family, personal), styles in sorted(groups.items(), key=lambda kv: min(s["Id"] for s in kv[1])):

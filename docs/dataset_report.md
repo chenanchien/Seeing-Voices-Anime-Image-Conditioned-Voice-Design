@@ -21,7 +21,7 @@ Table 0. Totals for the eight finished games.
 | Voice clips | 147,069 collected, **124,263 usable** |
 | Usable audio | **301.7 h** |
 | Distinct voice actors | 728 (339 appear in two or more games) |
-| Character images | 9,174 |
+| Character images | 9,932 |
 
 ## 2. Sources
 
@@ -32,6 +32,7 @@ All voice audio is the original Japanese in-game voice-over. Each game combines 
   - fan wikis
   - Hugging Face voice dumps of the game client
 - **Metadata** (names, CV, gender, profile text, art) comes from official sites and game data where possible, and from wikis otherwise.
+- **Extra art** for Blue Archive comes from the Blue Archive Wiki galleries: each style's Memorial Lobby illustration, plus the JP student card and pickup banner, which are tagged `promo` because they carry text overlays.
 
 Table 1. Sources per game.
 
@@ -92,10 +93,10 @@ Table 2. Per game, usable clips only.
 | Genshin Impact | 122 | 13,524 / 13,886 | 44.1 | 5.9 | 124 | 2,307 |
 | Arknights | 365 | 10,794 / 14,217 | 37.0 | 8.9 | 30 | 1,294 |
 | Uma Musume | 115 | 19,602 / 19,635 | 29.2 | 5.3 | 212 | 421 |
-| Blue Archive | 148 | 14,744 / 18,607 | 24.2 | 5.0 | 94 | 278 |
+| Blue Archive | 148 | 14,744 / 18,607 | 24.2 | 5.0 | 94 | 1,036 |
 | Honkai: Star Rail | 82 | 4,756 / 4,977 | 10.3 | 4.5 | 56 | 878 |
 | Wuthering Waves | 31 | 1,642 / 1,920 | 4.4 | 3.3 | 53 | 68 |
-| **Total** | **1,948** | **124,263 / 147,069** | **301.7** | | | **9,174** |
+| **Total** | **1,948** | **124,263 / 147,069** | **301.7** | | | **9,932** |
 
 Table 3. Gender, characters with usable clips.
 
@@ -160,7 +161,7 @@ These two games are still being processed. Their adapters have run, but audio cl
 
 - **Gender and actor imbalance.** 80% of hours are female, and a few actors and characters dominate. Training should cap or reweight clips per actor and per character.
 - **Line-type bias.** Battle and system lines are short and formulaic.
-- **Uneven art.** Every character with usable clips has at least one image. The count ranges from 1 (common in Arknights, Blue Archive, Uma Musume, Azur Lane and WuWa) to 54 (Genshin Impact, where promotional art is included).
+- **Uneven art.** Every character with usable clips has at least one image. The count ranges from 1 (common in Azur Lane and WuWa) to 54 (Genshin Impact, where promotional art is included). Single-skin Azur Lane ships have no further official art in game data. The wiki that collects their promotional art blocks crawlers, so we did not use it.
 - **Coverage gaps.**
   - Wuthering Waves: 27 of 58 characters have no voice in the HF dump, whose game version is older.
   - Honkai: Star Rail: 星神★アッハ has no gender label.

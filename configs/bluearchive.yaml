@@ -9,6 +9,12 @@ schaledb:
   student_page: https://schaledb.com/student/{path}
   name_langs: {en: name_en, cn: name_zh}
 
+# SchaleDB fields replaced per style Id. 10144 is Shun's child form in swimsuit (same CV 伊藤静;
+# wiki "Shun (Swimsuit) Kid") but SchaleDB lists it as family "" / personal シュエリン and with
+# the same Name as 10143, so it would neither merge nor get a distinct outfit_name.
+style_override:
+  10144: {FamilyName: 春原, PersonalName: シュン, Name: シュン（水着（幼女））}
+
 # Every BA student is female (confirmed by the project owner; SchaleDB has no gender field).
 gender: {value: female, source: manual}
 
@@ -23,3 +29,14 @@ category_rules:
 
 battle_shout_groups: [ExSkill, CommonSkill, BattleMove, BattleCovered, BattleDefense, BattleRetire,
                       BattleBuffed, BattleBuffSelf, BattleRecovery, BattleTacticalAction, Interaction]
+
+# Extra official art (src.sources.bluearchive_gallery): Blue Archive Wiki gallery pages.
+# robots.txt (Miraheze) allows /wiki/ articles; images are on static.wikitide.net.
+wiki_gallery:
+  page: https://bluearchive.wiki/wiki/{title}
+  # SchaleDB English name -> the wiki's name where they differ
+  title_override: {Aris: Arisu}
+  # SchaleDB English outfit -> the wiki's name for it (paired by student, 2026-11-04)
+  outfit_alias: {Armed: Battle, Bunny: Bunny Girl, School: School Uniform, Track: Sportswear,
+                 Camp: Camping, Pajamas: Pajama, Pop Idol: Idol, Cheer Squad: Cheerleader,
+                 Cycling: Riding, Small: Kid}
