@@ -3,9 +3,10 @@ JP agent voice-over from HF simon3000/zenless-voice.
 
 The parquet shards mix four languages, so audio comes from the per-speaker zip archives
 (speaker-archives/Japanese/...). Each <hash>.wav has a <hash>.json with voiceType; the JSON
-members are read once per archive in range spans and cached, and only voiceType "char"
-clips enter the manifest (hfzip:// URLs; src.download extracts them). These clips carry no
-transcription, so text_ja is filled by the Whisper ASR fallback in src.clean.langid.
+members are read once per archive in range spans and cached, and only the agent's own
+voice types (config voice_types: char, Accompany, Tips) enter the manifest (hfzip:// URLs;
+src.download extracts them). "char" clips carry no transcription, so their text_ja is filled
+by the Whisper ASR fallback in src.clean.langid.
 
     python -m src.sources.zenless                     # all agents
     python -m src.sources.zenless --speakers anbi lycaon ellen   # pilot by HF speaker code
@@ -55,6 +56,13 @@ def archive_meta(cfg: dict, file: str) -> tuple[dict, dict[str, dict]]:
         dest.write_text(json.dumps({n[:-5] + ".wav": json.loads(b) for n, b in data.items()},
                                    ensure_ascii=False), encoding="utf-8")
     return index, json.loads(dest.read_text(encoding="utf-8"))
+
+
+def line_type(j: dict) -> str:
+    """'.../Accompany_Anbi_EnterCinema_02.wem' -> 'EnterCinema' (speaker and line number removed)."""
+    stem = j["inGameFilename"].rsplit("/", 1)[1].rsplit(".", 1)[0]
+    parts = [p for p in stem.split("_")[1:] if norm(p) != norm(j.get("speaker") or "") and not p.isdigit()]
+    return "_".join(parts) or stem
 
 
 def english_names(sess: PoliteSession, cfg: dict) -> dict[str, str]:
@@ -134,7 +142,8 @@ def build(speakers: list[str] | None = None) -> None:
             n += 1
             clips.append({
                 "clip_uid": f"{GAME}:{s}:{stem}", "char_uid": uid, "outfit_name": None,
-                "category": f"character_vo/{j['voiceType']}", "category_norm": "other",  # no file name to classify
+                "category": f"{j['voiceType']}/{line_type(j)}" if j.get("inGameFilename") else j["voiceType"],
+                "category_norm": cfg["voice_type_norm"][j["voiceType"]],
                 "voice_scope": "character_vo", "speaker": s, "condition": None, "is_legacy": False,
                 "text_ja": (j.get("transcription") or "").strip() or None, "text_zh": None,
                 "text_source": "hf" if j.get("transcription") else None,

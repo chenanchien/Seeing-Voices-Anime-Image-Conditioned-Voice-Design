@@ -121,7 +121,7 @@ def build(ids: list[int] | None = None) -> None:
         if romaji not in cv_cache:
             va = page(sess, cfg["va_page"].format(title=wiki_title(romaji)),
                       RAW / "pages" / "voice_actors" / f"{romaji.replace('/', '_')}.html")
-            cv_cache[romaji] = cv_japanese(va)
+            cv_cache[romaji] = cv_japanese(va) or cfg["cv_name_ja_override"].get(romaji)
         chars.append({
             "char_uid": uid,
             "game": GAME,

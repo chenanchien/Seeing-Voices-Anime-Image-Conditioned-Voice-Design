@@ -46,3 +46,22 @@ category_norm:
   Retreat: battle
   Defense: battle
   Attack: battle
+
+# CV romaji -> Japanese name where the IOP Wiki has no Voice_Actor page with a Japanese name.
+# Sources: IOP Wiki page under the reversed name order (白砂沙帆), en.wikipedia (羊宮妃那),
+# Anime Characters Database (柳澤良音); the rest are well-known names (owner allowed lookup,
+# 2026-11-04). Romaji not listed here stays romaji-only (voice_actors keys it by romaji).
+cv_name_ja_override:
+  Shirasu Saho: 白砂沙帆
+  Hina Yomiya: 羊宮妃那
+  Hirone Yanagisawa: 柳澤良音
+  Yukana: ゆかな
+  Tano Asami: 田野アサミ
+  Akutsu Kana: 阿久津加菜
+  Kinugawa Rika: 衣川里佳
+  Hikisaka Rie: 引坂理絵
+  Akaneya Himika: 茜屋日海夏
+  Chitose Morinaga: 森永千才
+  Morinaga Chitose: 森永千才
+  Jenya: ジェーニャ
+  Yamada Misuzu: 山田美鈴

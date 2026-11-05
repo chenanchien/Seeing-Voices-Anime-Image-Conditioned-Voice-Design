@@ -4,13 +4,16 @@ host_rate_limit_sec:
   sg-wiki-api.hoyolab.com: 1.0
 
 # Audio: HF simon3000/zenless-voice, per-speaker zips (<hash>.wav + <hash>.json metadata).
-# Only voiceType "char" (agent voice-over: lobby, battle, bond lines) is used; it has no
-# transcription and no in-game file name, so text comes from the Whisper ASR fallback.
-# Story types (Galgame, Accompany, Level, ...) are skipped (owner decision 2026-10-28).
+# voiceType "char" is the agent voice-over (mostly battle shouts; no transcription and no
+# in-game file name, so text comes from the Whisper ASR fallback). The dataset has no lobby /
+# bond lines, so the agent's own non-cutscene lines are added: Accompany (hangout lines to the
+# player) and Tips (in-level reactions), both with source text (owner decision 2026-11-04).
+# Cutscene / story types (Galgame, Level, Cinema, ...) stay skipped.
 hf_repo: simon3000/zenless-voice
 hf_index: data/raw/zenless/hf_index.parquet   # text columns of every parquet shard
 archives: speaker-archives/README.md
-voice_types: [char]
+voice_types: [char, Accompany, Tips]
+voice_type_norm: {char: other, Accompany: bond, Tips: other}
 
 # HoYoLAB wiki: JP name, gender (性別), JP CV, official profile text, agent art
 metadata: {provider: hoyolab}
@@ -26,7 +29,19 @@ speaker_map:
   spbilly: Starlight - Billy
   lucy: Luciana de Montefio
   rina: Alexandrina Sebastiane
-# Codes without proof of identity: left out and listed in docs/sources/zenless.md
-speaker_unresolved: [Summer, azural, brujas, clara, lisa, longinus, norano, tsubaki, unagi, zhenzhen]
+  # community datamine table (github.com/donutman07/Zenless-Zone-Zero-ZZZ-Character-IDs),
+  # looked up 2026-11-04 with the owner's approval; consistent with each code's text lines
+  unagi: Hoshimi Miyabi
+  lisa: Grace Howard
+  clara: Piper Wheel
+  longinus: Soldier 11
+  norano: Komano Manato
+  tsubaki: Nekomiya Mana
+  Nekomata: Nekomiya Mana   # 猫又 nickname
+  brujas: Orphie Magnusson & "Magus"
+  azural: Dialyn
+  zhenzhen: Ye Shunguang
+  Summer: Sunna
+speaker_unresolved: []
 # speaker code -> archive name when they differ
 archive_alias: {hugovlad: Hugo}

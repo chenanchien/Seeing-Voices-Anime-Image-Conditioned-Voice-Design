@@ -27,6 +27,12 @@ def norm_key(name: str) -> str:
     return re.sub(r"\s+", "", unicodedata.normalize("NFKC", name))
 
 
+def cv_key_name(c: dict) -> str | None:
+    """Japanese CV name; romaji (cv_name_en) only when no Japanese spelling was found, so the
+    speaker still gets an id (it cannot merge with other games' Japanese-keyed entries)."""
+    return c.get("cv_name_ja") or c.get("cv_name_en")
+
+
 def cv_uid(key: str) -> str:
     return "cv_" + hashlib.sha1(key.encode("utf-8")).hexdigest()[:10]
 
@@ -44,9 +50,11 @@ def run() -> None:
     all_chars = {f: list(read_jsonl(f)) for f in files}
     for chars in all_chars.values():
         for c in chars:
-            raw = c.get("cv_name_ja")
+            raw = cv_key_name(c)
             if not raw:
                 continue
+            if not c.get("cv_name_ja"):
+                notes[norm_key(raw)].append("Japanese name unknown; keyed by romaji")
             parts = [p.strip() for p in MULTI_SEP.split(raw) if p.strip()]
             if len(parts) > 1:  # several CVs on one character: register each, keep uid empty
                 for p in parts:
@@ -90,7 +98,7 @@ def run() -> None:
 
     for path, chars in all_chars.items():
         for c in chars:
-            raw = c.get("cv_name_ja")
+            raw = cv_key_name(c)
             c["cv_uid"] = cv_uid(norm_key(raw)) if raw and not MULTI_SEP.search(raw) else None
         write_jsonl(path, chars)
 
