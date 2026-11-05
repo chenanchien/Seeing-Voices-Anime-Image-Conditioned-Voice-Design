@@ -5,6 +5,8 @@ line text, AzurLaneData (JP game data) for names, skins and CV, algwiki.moe for 
 The HF zip holds <Ship>/<line text>.ogg plus <Ship>/char.json ({algwiki voice URL: text}).
 The URL gives the ship group (cv-<group>) and the skin (`_<n>` suffix, skin id group*10+n),
 so every clip gets its outfit name. The wiki itself (azurlane.koumakan.jp) is not used.
+Ships missing from the dump are read from algwiki ship pages (src.sources.azurlane_algwiki)
+and their audio is fetched from algwiki directly.
 
     python -m src.sources.azurlane                     # all ships
     python -m src.sources.azurlane --names Akagi Ajax  # pilot by HF folder name
@@ -21,6 +23,7 @@ from pathlib import Path
 from src.common.http import PoliteSession
 from src.common.io import ROOT, load_config, write_jsonl
 from src.sources import hf_zip
+from src.sources.azurlane_algwiki import missing_ships
 
 log = logging.getLogger("azurlane")
 GAME = "azurlane"
@@ -66,6 +69,10 @@ def build(names: list[str] | None = None) -> None:
     sess = PoliteSession(min_interval=cfg["rate_limit_sec"])
     index = hf_zip.build_index(z["repo"], z["file"], ROOT / RAW / f"{z['file']}.index.jsonl")
     folders = char_jsons(cfg, index)
+    hf_groups = {Counter(parse_voice(u)[0] for u in v).most_common(1)[0][0] for v in folders.values()}
+    direct = {}  # algwiki slug -> ship name, for ships the HF dump lacks (audio fetched from algwiki)
+    for slug, (name, voices) in missing_ships(sess, cfg, hf_groups, lambda u: parse_voice(u)[0]).items():
+        folders[slug], direct[slug] = voices, name
     stats, skins = gamedata(sess, cfg, "statistics"), gamedata(sess, cfg, "skins")
     actors = {a["code"]: a["actor_name"] for a in gamedata(sess, cfg, "actors").values()}
     name_by_group: dict[int, dict] = {}
@@ -76,7 +83,7 @@ def build(names: list[str] | None = None) -> None:
         skins_by_group[s["ship_group"]][s["id"] - s["ship_group"] * 10] = s
     dataset_url = f"https://huggingface.co/datasets/{z['repo']}"
 
-    chars, clips, unmatched = [], [], 0
+    chars, clips, unmatched, skipped_direct = [], [], 0, []
     for folder in sorted(folders):
         if names and folder not in names:
             continue
@@ -85,8 +92,11 @@ def build(names: list[str] | None = None) -> None:
         st = name_by_group.get(group, {})
         sk = skins_by_group.get(group, {})
         base = sk.get(0, {})
+        if folder in direct and not base:  # algwiki-only ship not (yet) in the JP game: no JP name / CV
+            skipped_direct.append(direct[folder])
+            continue
         uid = f"{GAME}:{group}"
-        slug = re.sub(r"[^a-z0-9_]", "", folder.lower().replace(" ", "_"))
+        slug = folder if folder in direct else re.sub(r"[^a-z0-9_]", "", folder.lower().replace(" ", "_"))
         images, profiles = [], []
         for n, s in sorted(sk.items()):
             if not s.get("painting"):
@@ -102,8 +112,8 @@ def build(names: list[str] | None = None) -> None:
         seen_members = set()
         for url, text in voices.items():
             _, battle, key, n = parse_voice(url)
-            member = f"{folder}/{text}.ogg"
-            if member not in index:
+            member = url if folder in direct else f"{folder}/{text}.ogg"
+            if folder not in direct and member not in index:
                 unmatched += 1  # line removed by the HF cleaning (e.g. English) or renamed
                 continue
             if member in seen_members:  # two voice keys share one text -> one file
@@ -111,7 +121,7 @@ def build(names: list[str] | None = None) -> None:
             seen_members.add(member)
             if key == "profile" and n == 0:
                 profiles.append({"lang": "ja", "kind": "self_introduction", "condition": None,
-                                 "text": text, "source_url": dataset_url})
+                                 "text": text, "source_url": cfg["ship_page"].format(slug=slug) if folder in direct else dataset_url})
             stem = url.rsplit("/", 1)[1].rsplit(".", 1)[0]
             clips.append({
                 "clip_uid": f"{GAME}:{group}:{'battle:' if battle else ''}{stem}",
@@ -124,9 +134,9 @@ def build(names: list[str] | None = None) -> None:
                 "voice_scope": "character_vo",
                 "text_ja": text or None,
                 "text_zh": None,
-                "text_source": "gamedata" if text else None,
+                "text_source": ("wiki" if folder in direct else "gamedata") if text else None,
                 "audio_path": str(RAW / "audio" / str(group) / f"{'battle_' if battle else ''}{stem}.flac"),
-                "audio_url": f"hfzip://{z['repo']}/{z['file']}#{member}",
+                "audio_url": url if folder in direct else f"hfzip://{z['repo']}/{z['file']}#{member}",
                 "source_sha1": None,
                 "source_url": url,
                 "is_battle_shout": False,
@@ -137,7 +147,7 @@ def build(names: list[str] | None = None) -> None:
             "game": GAME,
             "name_ja": st.get("name") or base.get("name"),
             "name_zh": None,
-            "name_en": folder,
+            "name_en": direct.get(folder, folder),
             "gender": cfg["gender"]["value"],
             "gender_source": cfg["gender"]["source"],
             "gender_alt": {},
@@ -146,13 +156,16 @@ def build(names: list[str] | None = None) -> None:
             "cv_uid": None,
             "images": images,
             "profile_texts": profiles,
-            "source_urls": [cfg["ship_page"].format(slug=slug), dataset_url],
+            "source_urls": [cfg["ship_page"].format(slug=slug)] + ([] if folder in direct else [dataset_url]),
         })
         log.info("%s %s / %s (CV %s): %d clips, %d skins", uid, chars[-1]["name_ja"], folder, cv,
                  sum(c["char_uid"] == uid for c in clips), len(images))
     n1 = write_jsonl(ROOT / "manifests" / f"{GAME}_characters.jsonl", chars)
     n2 = write_jsonl(ROOT / "manifests" / f"{GAME}_clips.jsonl", clips)
     log.info("wrote %d characters, %d clips (%d voice URLs without an audio file)", n1, n2, unmatched)
+    log.info("from algwiki: %d ships; skipped %d not in the JP game data: %s",
+             len(direct) - len(skipped_direct),
+             len(skipped_direct), skipped_direct)
 
 
 if __name__ == "__main__":

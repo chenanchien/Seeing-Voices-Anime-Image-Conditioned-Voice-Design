@@ -21,3 +21,17 @@ The owner asked to try the Hugging Face dump first. It works, so azurlane.koumak
   - `src/sources/azurlane_paint.py` is a Python port of algwiki's own compositor (`js/azurlane_compositor.js`) and writes the assembled full-body PNG.
   - 1,895 skins in total. About 5 cached requests per skin at 1 req/s, so ~3 h.
 - **Gender**: no source field. All ships are labelled `female`, `gender_source: manual` (owner decision, 2026-10-30).
+
+## Ships missing from the HF dump (2026-11-05)
+
+The HF dump has 617 ship groups, while the JP game data has 857 playable ones. The missing ones include
+USS Enterprise (the dump's "Enterprise" folder is HMS Enterprise), 霞, 初月 and the μ兵装 variants.
+`src.sources.azurlane_algwiki` reads algwiki's ship list (880 pages, cached in data/raw/azurlane/pages)
+and builds `{voice URL: JP line}` from each missing ship's voice table. This is the same data as the dump's char.json.
+Audio is fetched from algwiki directly (`assets/cue/cv-<group>/<key>.ogg`), and `text_source` is `wiki`.
+This adds 240 ships. 29 algwiki ships are not in the JP game data (CN/EN-first releases and collabs: no JP name or CV) and are skipped.
+
+Pages carry no charset header. They are decoded as UTF-8, because requests would otherwise assume Latin-1.
+
+Other skin sources checked: the CN game data adds only 9 skins, none of them for a single-skin ship.
+BWIKI blocks after 2-3 requests (HTTP 567) and the Azur Lane Wiki sits behind Anubis, so neither is used.

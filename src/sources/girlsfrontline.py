@@ -51,7 +51,10 @@ def page(sess: PoliteSession, url: str, dest: Path) -> str | None:
         return None
     if not dest.exists():
         try:
-            text = sess.get(url).text
+            r = sess.get(url)
+            if "charset" not in r.headers.get("content-type", ""):
+                r.encoding = "utf-8"  # requests would assume ISO-8859-1 (algwiki sends no charset)
+            text = r.text
         except requests.HTTPError as e:
             if getattr(e.response, "status_code", None) == 404:
                 miss.parent.mkdir(parents=True, exist_ok=True)

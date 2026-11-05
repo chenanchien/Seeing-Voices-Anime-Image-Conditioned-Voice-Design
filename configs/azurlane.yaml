@@ -50,3 +50,8 @@ category_norm:
   lose: battle
   skill: battle
   hp: battle
+
+# Ships the HF dump lacks: voice URL + JP line from algwiki ship pages (src.sources.azurlane_algwiki)
+algwiki:
+  base: https://algwiki.moe
+  ship_list: https://algwiki.moe/shiplist.html
