@@ -21,7 +21,7 @@ Table 0. Totals for the eight finished games.
 | Voice clips | 147,069 collected, **124,263 usable** |
 | Usable audio | **301.7 h** |
 | Distinct voice actors | 728 (339 appear in two or more games) |
-| Character images | 9,932 |
+| Character images | 9,977 |
 
 ## 2. Sources
 
@@ -95,8 +95,8 @@ Table 2. Per game, usable clips only.
 | Uma Musume | 115 | 19,602 / 19,635 | 29.2 | 5.3 | 212 | 421 |
 | Blue Archive | 148 | 14,744 / 18,607 | 24.2 | 5.0 | 94 | 1,036 |
 | Honkai: Star Rail | 82 | 4,756 / 4,977 | 10.3 | 4.5 | 56 | 878 |
-| Wuthering Waves | 31 | 1,642 / 1,920 | 4.4 | 3.3 | 53 | 68 |
-| **Total** | **1,948** | **124,263 / 147,069** | **301.7** | | | **9,932** |
+| Wuthering Waves | 31 | 1,642 / 1,920 | 4.4 | 3.3 | 53 | 113 |
+| **Total** | **1,948** | **124,263 / 147,069** | **301.7** | | | **9,977** |
 
 Table 3. Gender, characters with usable clips.
 
@@ -161,9 +161,10 @@ These two games are still being processed. Their adapters have run, but audio cl
 
 - **Gender and actor imbalance.** 80% of hours are female, and a few actors and characters dominate. Training should cap or reweight clips per actor and per character.
 - **Line-type bias.** Battle and system lines are short and formulaic.
-- **Uneven art.** Every character with usable clips has at least one image. The count ranges from 1 (common in Azur Lane and WuWa) to 54 (Genshin Impact, where promotional art is included). Single-skin Azur Lane ships have no further official art in game data. The wiki that collects their promotional art blocks crawlers, so we did not use it.
+- **Uneven art.** Every character with usable clips has at least one image. The count ranges from 1 (common in Azur Lane and WuWa) to 54 (Genshin Impact, where promotional art is included). Single-skin Azur Lane ships have no further official art in game data. The wikis that collect it (Azur Lane Wiki, BWIKI) block crawlers, so they were not used. WuWa art is the full-body default portrait, a half-body card and paid-skin illustrations. For the 13 newest WuWa characters, only the card is available.
 - **Coverage gaps.**
   - Wuthering Waves: 27 of 58 characters have no voice in the HF dump, whose game version is older.
+  - Azur Lane: the HF dump covers 617 ship groups. Some well-known ships are missing, e.g. USS Enterprise (CV-6). The dump's "Enterprise" folder is HMS Enterprise, a different ship with the same Japanese name.
   - Honkai: Star Rail: 星神★アッハ has no gender label.
 - **Text quality.** Wiki and ASR transcriptions may contain errors. `text_source` records the origin of each transcript.
 - **Licensing.** All material belongs to the game publishers. The dataset is collected for non-commercial course research and is not redistributed.

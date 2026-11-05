@@ -163,12 +163,21 @@ def encore_characters(sess: PoliteSession, cfg: dict, names: list[str] | None) -
             if isinstance(st, dict) and st.get("Content"):
                 profiles.append({"lang": "ja", "kind": f"story:{st.get('Title', '')}", "condition": None,
                                  "text": clean(st["Content"]), "source_url": url})
+        # Skins[].RoleStand is a shared placeholder (a quest icon / another character's texture),
+        # so art comes from RolePortrait (full-body default) and each paid skin's share illustration.
+        # encore's /api/resource/ URLs serve the SPA; the files live under /resource/.
+        res = lambda u: re.sub(r"^https://api(?:-v2)?\.encore\.moe/api/resource/", ec["resource"], u)
         images = []
+        if d.get("RolePortrait"):
+            images.append({"kind": "base", "outfit_name": "default", "source_url": res(d["RolePortrait"]),
+                           "file": f"{r['Id']}_portrait{Path(d['RolePortrait']).suffix}"})
+        if d.get("FormationRoleCard"):  # half-body card; the only art encore has for the newest characters
+            images.append({"kind": "card", "outfit_name": "default", "source_url": res(d["FormationRoleCard"]),
+                           "file": f"{r['Id']}_card{Path(d['FormationRoleCard']).suffix}"})
         for sk in d.get("Skins") or []:
-            if sk.get("RoleStand"):
-                images.append({"kind": "base" if "デフォルト" in (sk.get("SubDecName") or "") else "skin",
-                               "outfit_name": sk.get("Name"), "source_url": sk["RoleStand"],
-                               "file": f"{r['Id']}_{sk['Id']}{Path(sk['RoleStand']).suffix or '.png'}"})
+            if sk.get("ShareTexturePath"):
+                images.append({"kind": "skin", "outfit_name": sk.get("Name"), "source_url": res(sk["ShareTexturePath"]),
+                               "file": f"{r['Id']}_{sk['Id']}{Path(sk['ShareTexturePath']).suffix}"})
         out.append({
             "id": str(r["Id"]), "name_zh": r["Name"], "name_ja": d["Name"]["Content"],
             "name_en": None, "gender_raw": content("Sex"), "cv_name_ja": content("CVNameJp"),
