@@ -28,6 +28,7 @@ from src.common.io import ROOT, read_jsonl
 from src.report import load_games
 
 log = logging.getLogger("package")
+Image.MAX_IMAGE_PIXELS = None  # our own downloads; some assembled Azur Lane paintings exceed 120 MP
 DROP = {"audio_path", "audio_file", "wav16_path", "wav24_path", "audio_url", "exclude", "exclude_reasons"}
 
 
