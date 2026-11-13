@@ -81,7 +81,7 @@ def game_report(game: str, chars: list[dict], clips: list[dict]) -> str:
     cats = sorted({k for k, _ in norm})
     asr = sum(1 for c in clips if c.get("text_source") == "asr")
     legacy = sum(1 for c in clips if c.get("is_legacy") and not c.get("exclude", True))
-    dupe_names = [k for k, v in Counter(c["name_ja"] for c in chars).items() if v > 1]
+    dupe_names = [k for k, v in Counter(c["name_ja"] for c in chars if c["name_ja"]).items() if v > 1]
     return "\n\n".join([
         f"# {game} dataset stats",
         table(["game", "characters", "outfits (base+skins)", "clips", "usable clips", "usable duration",
