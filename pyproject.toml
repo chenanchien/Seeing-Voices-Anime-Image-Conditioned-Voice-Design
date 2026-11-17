@@ -17,5 +17,11 @@ dependencies = [
     "pillow>=13.0.0",
 ]
 
+[project.optional-dependencies]
+embed = [
+    "torch>=2.4",
+    "transformers>=4.45",
+]
+
 [tool.uv]
 package = false

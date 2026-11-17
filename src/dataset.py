@@ -11,10 +11,18 @@ folder) or this repo (manifests/ plus data/processed, used by the data maintaine
     test = load_split("test", root=..., split="actor_disjoint")
     clips = load_clips(train, root=..., max_per_char=50, exclude_categories=["battle"])
 
+    img = load_embeddings("clip-l14", root=...)                     # {image_key: vector}
+    spk = load_embeddings("wavlm-sv", root=...)                     # {clip_uid: vector}
+    z = np.stack([img[i["image_key"]] for i in train[0]["images"]])
+
 Each character dict is its manifest record plus split, group_id, cv_uids (list), multi_voice
 (several CVs, e.g. Gray + Add; train only, no single voice prototype), actor_seen
-(main val/test only), train_frac (main train only), and images[].image_path (absolute).
+(main val/test only), train_frac (main train only), and images[].image_path (absolute) /
+images[].image_key (key into image embeddings).
 Each clip dict is its manifest record plus audio_path (absolute).
+
+Embeddings (src.embed) live in <root>/embeddings/<name>/<game>.npz for the share package and
+in data/embeddings/<name>/ in the repo.
 """
 from __future__ import annotations
 
@@ -23,6 +31,8 @@ import json
 import random
 from functools import lru_cache
 from pathlib import Path
+
+import numpy as np
 
 SPLITS = Path(__file__).resolve().parents[1] / "splits"
 
@@ -41,12 +51,14 @@ def _characters(root: Path, game: str) -> dict[str, dict]:
     if _is_repo(root):
         chars = _jsonl(root / "manifests" / f"{game}_characters.jsonl")
         for c in chars:
-            c["images"] = [{**i, "image_path": str(root / i["path"])} for i in c["images"]
-                           if i.get("path") and (root / i["path"]).exists()]
+            c["images"] = [{**i, "image_path": str(root / i["path"]),
+                            "image_key": f"{game}/images/{Path(i['path']).relative_to(f'data/raw/{game}/images').with_suffix('')}"}
+                           for i in c["images"] if i.get("path") and (root / i["path"]).exists()]
     else:
         chars = _jsonl(root / game / f"{game}_characters.jsonl")
         for c in chars:
-            c["images"] = [{**i, "image_path": str(root / i["image"])} for i in c["images"]]
+            c["images"] = [{**i, "image_path": str(root / i["image"]), "image_key": str(Path(i["image"]).with_suffix(""))}
+                           for i in c["images"]]
     return {c["char_uid"]: c for c in chars}
 
 
@@ -113,4 +125,18 @@ def load_clips(chars: list[dict], root: str | Path, max_per_char: int | None = N
         if max_per_char is not None and len(cs) > max_per_char:
             cs = random.Random(f"{seed}:{ch['char_uid']}").sample(cs, max_per_char)
         out += cs
+    return out
+
+
+def load_embeddings(name: str, root: str | Path, games: list[str] | None = None) -> dict[str, np.ndarray]:
+    """{key: float16 unit vector} for one embedding set (e.g. "clip-l14", "siglip", "wavlm-sv").
+    Image keys match images[].image_key; speaker keys are clip_uid."""
+    root = Path(root).expanduser().resolve()
+    base = root / ("data/embeddings" if _is_repo(root) else "embeddings") / name
+    out = {}
+    for f in sorted(base.glob("*.npz")):
+        if f.name.endswith(".partial.npz") or (games and f.stem not in games):
+            continue
+        z = np.load(f)
+        out.update(zip(z["keys"].tolist(), z["emb"]))
     return out
