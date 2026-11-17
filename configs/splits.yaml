@@ -13,3 +13,10 @@ eligible:
 # equal name stems. Overrides, as lists of char_uids:
 merge: []                           # [[uid, uid, ...], ...] put these in one group
 separate: []                        # [[uid, uid], ...] never group these two directly
+
+# Characters with several CVs (Gray + Add, Fischl + Oz, Firefly + SAM, ...) have no single voice
+# prototype, so their group / component always goes to train (owner decision 2026-11-17).
+# Listed here: several CVs credited, but only one speaks the character voice-over.
+single_voice:
+  - genshin:4                       # 雲菫: 杨扬 sings the opera parts
+  - starrail:知更鸟                 # ロビン: Chevy sings

@@ -11,7 +11,8 @@ folder) or this repo (manifests/ plus data/processed, used by the data maintaine
     test = load_split("test", root=..., split="actor_disjoint")
     clips = load_clips(train, root=..., max_per_char=50, exclude_categories=["battle"])
 
-Each character dict is its manifest record plus split, group_id, cv_uids (list), actor_seen
+Each character dict is its manifest record plus split, group_id, cv_uids (list), multi_voice
+(several CVs, e.g. Gray + Add; train only, no single voice prototype), actor_seen
 (main val/test only), train_frac (main train only), and images[].image_path (absolute).
 Each clip dict is its manifest record plus audio_path (absolute).
 """
@@ -90,7 +91,7 @@ def load_split(part: str, root: str | Path, split: str = "main", train_frac: flo
             if not c["images"]:
                 continue
         c.update(split=part, group_id=row["group_id"], cv_uids=row["cv_uids"].split("|") if row["cv_uids"] else [],
-                 actor_seen=row.get("actor_seen") or None,
+                 multi_voice=row.get("multi_voice") == "True", actor_seen=row.get("actor_seen") or None,
                  train_frac=float(row["train_frac"]) if row.get("train_frac") else None)
         out.append(c)
     return out

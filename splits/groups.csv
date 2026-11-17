@@ -1,11 +1,11 @@
 group_id,size,cross_game,split,members
 fgo:119,9,False,train,fgo:119 アルトリア・ペンドラゴン | fgo:129 アルトリア・ペンドラゴン | fgo:179 アルトリア・ペンドラゴン〔オルタ〕 | fgo:2 アルトリア・ペンドラゴン | fgo:265 アルトリア・ペンドラゴン | fgo:3 アルトリア・ペンドラゴン〔オルタ〕 | fgo:4 アルトリア・ペンドラゴン〔リリィ〕 | fgo:73 アルトリア・ペンドラゴン〔サンタオルタ〕 | fgo:78 アルトリア・ペンドラゴン〔オルタ〕
-fgo:106,5,False,train,fgo:106 ジャンヌ・ダルク〔オルタ〕 | fgo:141 ジャンヌ・ダルク・オルタ・サンタ・リリィ | fgo:216 ジャンヌ・ダルク | fgo:219 ジャンヌ・ダルク〔オルタ〕 | fgo:59 ジャンヌ・ダルク
-fgo:138,5,False,val,fgo:138 エリザベート・バートリー〔ブレイブ〕 | fgo:18 エリザベート・バートリー | fgo:326 エリザベート・バートリー〔シンデレラ〕 | fgo:457 エリザベート・バートリー | fgo:61 エリザベート・バートリー〔ハロウィン〕
+fgo:106,5,False,val,fgo:106 ジャンヌ・ダルク〔オルタ〕 | fgo:141 ジャンヌ・ダルク・オルタ・サンタ・リリィ | fgo:216 ジャンヌ・ダルク | fgo:219 ジャンヌ・ダルク〔オルタ〕 | fgo:59 ジャンヌ・ダルク
+fgo:138,5,False,test,fgo:138 エリザベート・バートリー〔ブレイブ〕 | fgo:18 エリザベート・バートリー | fgo:326 エリザベート・バートリー〔シンデレラ〕 | fgo:457 エリザベート・バートリー | fgo:61 エリザベート・バートリー〔ハロウィン〕
 azurlane:10209,4,False,train,azurlane:10209 クリーブランド | azurlane:10220 リトル・クリーブランド | azurlane:10224 クリーブランド(μ兵装) | azurlane:970209 クリーブランド(META)
 azurlane:1040001,4,False,train,azurlane:1040001 キズナアイ | azurlane:1040002 キズナアイ・エレガント | azurlane:1040003 キズナアイ・アニバーサリー | azurlane:1040004 キズナアイ・スーパーゲーマー
 azurlane:30707,4,False,train,azurlane:30707 大鳳 | azurlane:30711 大鳳(μ兵装) | azurlane:30713 大鳳ちゃん | azurlane:970705 大鳳(META)
-fgo:133,4,False,test,fgo:133 スカサハ | fgo:215 スカサハ＝スカディ | fgo:357 スカサハ＝スカディ | fgo:70 スカサハ
+fgo:133,4,False,train,fgo:133 スカサハ | fgo:215 スカサハ＝スカディ | fgo:357 スカサハ＝スカディ | fgo:70 スカサハ
 fgo:155,4,False,train,fgo:155 謎のヒロインX〔オルタ〕 | fgo:222 謎のヒロインXX | fgo:423 謎のヒロインXX〔オルタ〕 | fgo:86 謎のヒロインX
 fgo:209,4,False,train,fgo:209 沖田総司〔オルタ〕 | fgo:267 沖田総司 | fgo:317 沖田総司〔オルタ〕 | fgo:68 沖田総司
 azurlane:10205,3,False,train,azurlane:10205 ヘレナ | azurlane:10219 リトル・ヘレナ | azurlane:970201 ヘレナ(META)
@@ -19,21 +19,21 @@ azurlane:30402,3,False,test,azurlane:30402 比叡 | azurlane:30406 比叡ちゃ�
 azurlane:30405,3,False,train,azurlane:30405 天城 | azurlane:30407 天城ちゃん | azurlane:30715 天城(空母)
 azurlane:30701,3,False,train,azurlane:30701 赤城 | azurlane:30709 赤城ちゃん | azurlane:30710 赤城(μ兵装)
 azurlane:40303,3,False,train,azurlane:40303 プリンツ・オイゲン | azurlane:40312 プリンツ・オイゲンちゃん | azurlane:40315 プリンツ・オイゲン(μ兵装)
-fgo:114,3,False,val,fgo:114 源頼光 | fgo:181 源頼光 | fgo:403 源頼光／丑御前
+fgo:114,3,False,train,fgo:114 源頼光 | fgo:181 源頼光 | fgo:403 源頼光／丑御前
 fgo:12,3,True,train,fgo:12 ギルガメッシュ | fgo:145 ギルガメッシュ | starrail:5338 ギルガメッシュ
 fgo:120,3,False,train,fgo:120 ニトクリス | fgo:177 ニトクリス | fgo:370 ニトクリス〔オルタ〕
-fgo:127,3,False,train,fgo:127 レオナルド・ダ・ヴィンチ | fgo:253 レオナルド・ダ・ヴィンチ | fgo:320 レオナルド・ダ・ヴィンチ
+fgo:127,3,False,val,fgo:127 レオナルド・ダ・ヴィンチ | fgo:253 レオナルド・ダ・ヴィンチ | fgo:320 レオナルド・ダ・ヴィンチ
 fgo:130,3,False,train,fgo:130 マリー・アントワネット | fgo:29 マリー・アントワネット | fgo:407 マリー・アントワネット〔オルタ〕
 fgo:135,3,False,train,fgo:135 マルタ | fgo:30 マルタ | fgo:330 マルタ〔サンタ〕
 fgo:142,3,False,train,fgo:142 イシュタル | fgo:182 イシュタル | fgo:268 スペース・イシュタル
-fgo:146,3,False,train,fgo:146 メドゥーサ | fgo:23 メドゥーサ | fgo:384 メドゥーサ
+fgo:146,3,False,test,fgo:146 メドゥーサ | fgo:23 メドゥーサ | fgo:384 メドゥーサ
 fgo:166,3,False,train,fgo:166 ＢＢ | fgo:220 ＢＢ | fgo:421 ＢＢドバイ
 fgo:17,3,False,train,fgo:17 クー・フーリン | fgo:38 クー・フーリン | fgo:98 クー・フーリン〔オルタ〕
 fgo:175,3,False,train,fgo:175 ネロ・クラウディウス | fgo:5 ネロ・クラウディウス | fgo:90 ネロ・クラウディウス〔ブライド〕
-fgo:195,3,False,test,fgo:195 アビゲイル・ウィリアムズ | fgo:289 アビゲイル・ウィリアムズ〔夏〕 | fgo:430 アビゲイル・ウィリアムズ〔サンタ〕
+fgo:195,3,False,train,fgo:195 アビゲイル・ウィリアムズ | fgo:289 アビゲイル・ウィリアムズ〔夏〕 | fgo:430 アビゲイル・ウィリアムズ〔サンタ〕
 fgo:238,3,False,train,fgo:238 キングプロテア | fgo:476 キングプロテア | fgo:479 キングプロテア・オルタ
 fgo:243,3,False,train,fgo:243 グレイ | fgo:472 グレイ・リリィ | fgo:473 グレイ・リリィ
-fgo:296,3,False,train,fgo:296 ネモ | fgo:401 ネモ〔サンタ〕 | fgo:452 ネモ／ノア
+fgo:296,3,False,val,fgo:296 ネモ | fgo:401 ネモ〔サンタ〕 | fgo:452 ネモ／ノア
 starrail:1226,3,False,train,starrail:1226 丹恒・飲月 | starrail:3957 丹恒・騰荒 | starrail:8 丹恒
 arknights:char_010_chen,2,False,test,arknights:char_010_chen チェン | arknights:char_1013_chen2 遊龍チェン
 arknights:char_017_huang,2,False,test,arknights:char_017_huang ブレイズ | arknights:char_1040_blaze2 熾炎ブレイズ
@@ -46,12 +46,12 @@ arknights:char_1021_kroos2,2,False,train,arknights:char_1021_kroos2 寒芒クル
 arknights:char_1023_ghost2,2,False,train,arknights:char_1023_ghost2 帰溟スペクター | arknights:char_143_ghost スペクター
 arknights:char_1024_hbisc2,2,False,train,arknights:char_1024_hbisc2 濯塵ハイビスカス | arknights:char_120_hibisc ハイビスカス
 arknights:char_1026_gvial2,2,False,train,arknights:char_1026_gvial2 百錬ガヴィル | arknights:char_187_ccheal ガヴィル
-arknights:char_1027_greyy2,2,False,train,arknights:char_1027_greyy2 承曦グレイ | arknights:char_253_greyy グレイ
+arknights:char_1027_greyy2,2,False,val,arknights:char_1027_greyy2 承曦グレイ | arknights:char_253_greyy グレイ
 arknights:char_1028_texas2,2,False,train,arknights:char_1028_texas2 血掟テキサス | arknights:char_102_texas テキサス
 arknights:char_1029_yato2,2,False,train,arknights:char_1029_yato2 キリンRヤトウ | arknights:char_502_nblade ヤトウ
 arknights:char_1030_noirc2,2,False,train,arknights:char_1030_noirc2 レウスSノイルホーン | arknights:char_500_noirc ノイルホーン
 arknights:char_1031_slent2,2,False,train,arknights:char_1031_slent2 淬羽サイレンス | arknights:char_108_silent サイレンス
-arknights:char_1032_excu2,2,False,val,arknights:char_1032_excu2 聖約イグゼキュター | arknights:char_279_excu イグゼキュター
+arknights:char_1032_excu2,2,False,train,arknights:char_1032_excu2 聖約イグゼキュター | arknights:char_279_excu イグゼキュター
 arknights:char_1033_swire2,2,False,train,arknights:char_1033_swire2 琳琅スワイヤー | arknights:char_308_swire スワイヤー
 arknights:char_1034_jesca2,2,False,val,arknights:char_1034_jesca2 滌火ジェシカ | arknights:char_235_jesica ジェシカ
 arknights:char_1036_fang2,2,False,train,arknights:char_1036_fang2 歴陣鋭槍フェン | arknights:char_123_fang フェン
@@ -136,21 +136,21 @@ azurlane:90301,2,False,train,azurlane:90301 フォッシュ | azurlane:970303 �
 azurlane:90401,2,False,train,azurlane:90401 ダンケルク | azurlane:970406 ダンケルク(META)
 azurlane:90503,2,False,train,azurlane:90503 ガスコーニュ(μ兵装) | azurlane:99901 ガスコーニュ
 fgo:100,2,False,train,fgo:100 エレナ・ブラヴァツキー | fgo:180 エレナ・ブラヴァツキー
-fgo:102,2,False,test,fgo:102 李書文 | fgo:235 李書文
+fgo:102,2,False,train,fgo:102 李書文 | fgo:235 李書文
 fgo:11,2,False,train,fgo:11 エミヤ | fgo:157 エミヤ〔オルタ〕
 fgo:112,2,False,test,fgo:112 酒呑童子 | fgo:225 酒呑童子
 fgo:115,2,False,train,fgo:115 坂田金時 | fgo:51 坂田金時
-fgo:116,2,False,train,fgo:116 茨木童子 | fgo:217 茨木童子
-fgo:128,2,False,train,fgo:128 玉藻の前 | fgo:62 玉藻の前
+fgo:116,2,False,val,fgo:116 茨木童子 | fgo:217 茨木童子
+fgo:128,2,False,val,fgo:128 玉藻の前 | fgo:62 玉藻の前
 fgo:131,2,False,train,fgo:131 アン・ボニー＆メアリー・リード | fgo:66 アン・ボニー＆メアリー・リード
 fgo:132,2,False,train,fgo:132 モードレッド | fgo:76 モードレッド
-fgo:134,2,False,train,fgo:134 清姫 | fgo:56 清姫
+fgo:134,2,False,test,fgo:134 清姫 | fgo:56 清姫
 fgo:136,2,False,train,fgo:136 イリヤスフィール・フォン・アインツベルン | fgo:286 イリヤスフィール・フォン・アインツベルン
 fgo:137,2,False,train,fgo:137 クロエ・フォン・アインツベルン | fgo:388 クロエ・フォン・アインツベルン
-fgo:14,2,False,train,fgo:14 アタランテ | fgo:202 アタランテ〔オルタ〕
-fgo:144,2,False,val,fgo:144 ケツァル・コアトル | fgo:233 ケツァル・コアトル〔サンバ／サンタ〕
-fgo:153,2,False,train,fgo:153 宮本武蔵 | fgo:261 宮本武蔵
-fgo:164,2,False,test,fgo:164 パッションリップ | fgo:445 パッションリップ
+fgo:14,2,False,val,fgo:14 アタランテ | fgo:202 アタランテ〔オルタ〕
+fgo:144,2,False,train,fgo:144 ケツァル・コアトル | fgo:233 ケツァル・コアトル〔サンバ／サンタ〕
+fgo:153,2,False,val,fgo:153 宮本武蔵 | fgo:261 宮本武蔵
+fgo:164,2,False,train,fgo:164 パッションリップ | fgo:445 パッションリップ
 fgo:165,2,False,train,fgo:165 鈴鹿御前 | fgo:387 鈴鹿御前〔サマバケ〕
 fgo:167,2,False,train,fgo:167 殺生院キアラ | fgo:285 殺生院キアラ
 fgo:170,2,False,test,fgo:170 武則天 | fgo:358 武則天
@@ -161,47 +161,47 @@ fgo:189,2,False,train,fgo:189 刑部姫 | fgo:262 刑部姫
 fgo:190,2,False,train,fgo:190 メカエリチャン | fgo:191 メカエリチャンⅡ号機
 fgo:196,2,False,train,fgo:196 エレシュキガル | fgo:417 エレシュキガル
 fgo:197,2,False,train,fgo:197 アルテラ・ザ・サン〔タ〕 | fgo:8 アルテラ
-fgo:198,2,False,test,fgo:198 葛飾北斎 | fgo:264 葛飾北斎
+fgo:198,2,False,train,fgo:198 葛飾北斎 | fgo:264 葛飾北斎
 fgo:201,2,False,train,fgo:201 アナスタシア | fgo:318 アナスタシア＆ヴィイ
 fgo:211,2,False,train,fgo:211 坂本龍馬 | fgo:329 坂本龍馬
-fgo:218,2,False,val,fgo:218 牛若丸 | fgo:27 牛若丸
+fgo:218,2,False,train,fgo:218 牛若丸 | fgo:27 牛若丸
 fgo:22,2,False,train,fgo:22 ロムルス | fgo:280 ロムルス＝クィリヌス
 fgo:221,2,False,train,fgo:221 女王メイヴ | fgo:99 女王メイヴ
 fgo:223,2,False,train,fgo:223 ディルムッド・オディナ | fgo:71 ディルムッド・オディナ
 fgo:230,2,False,train,fgo:230 虞美人 | fgo:288 虞美人
 fgo:234,2,False,train,fgo:234 紅閻魔 | fgo:475 紅閻魔
 fgo:236,2,False,train,fgo:236 美遊・エーデルフェルト | fgo:449 美遊・エーデルフェルト
-fgo:237,2,False,test,fgo:237 紫式部 | fgo:291 紫式部
+fgo:237,2,False,train,fgo:237 紫式部 | fgo:291 紫式部
 fgo:239,2,False,train,fgo:239 カーマ | fgo:321 カーマ
 fgo:247,2,False,train,fgo:247 アルジュナ〔オルタ〕 | fgo:84 アルジュナ
-fgo:256,2,False,train,fgo:256 ガレス | fgo:354 ガレス
+fgo:256,2,False,val,fgo:256 ガレス | fgo:354 ガレス
 fgo:259,2,False,train,fgo:259 シャルロット・コルデー | fgo:319 シャルロット・コルデー
 fgo:263,2,False,train,fgo:263 カーミラ | fgo:46 カーミラ
 fgo:270,2,False,train,fgo:270 アストルフォ | fgo:94 アストルフォ
 fgo:271,2,False,train,fgo:271 ナイチンゲール〔サンタ〕 | fgo:97 ナイチンゲール
-fgo:272,2,False,val,fgo:272 超人オリオン | fgo:60 オリオン
+fgo:272,2,False,train,fgo:272 超人オリオン | fgo:60 オリオン
 fgo:276,2,False,train,fgo:276 清少納言 | fgo:323 清少納言
-fgo:279,2,False,train,fgo:279 カイニス | fgo:322 カイニス
+fgo:279,2,False,val,fgo:279 カイニス | fgo:322 カイニス
 fgo:283,2,False,train,fgo:283 宇津見エリセ | fgo:356 宇津見エリセ
-fgo:284,2,False,train,fgo:284 アルトリア・キャスター | fgo:386 アルトリア・キャスター
-fgo:287,2,False,train,fgo:287 ブリュンヒルデ | fgo:88 ブリュンヒルデ
+fgo:284,2,False,test,fgo:284 アルトリア・キャスター | fgo:386 アルトリア・キャスター
+fgo:287,2,False,test,fgo:287 ブリュンヒルデ | fgo:88 ブリュンヒルデ
 fgo:295,2,False,train,fgo:295 ヴァン・ゴッホ | fgo:428 ヴァン・ゴッホ〔マイナー〕
 fgo:299,2,False,train,fgo:299 伊吹童子 | fgo:355 伊吹童子
-fgo:301,2,False,train,fgo:301 カルナ〔サンタ〕 | fgo:85 カルナ
+fgo:301,2,False,test,fgo:301 カルナ〔サンタ〕 | fgo:85 カルナ
 fgo:310,2,False,train,fgo:310 バーゲスト | fgo:391 ＵＤＫ－バーゲスト
-fgo:312,2,False,val,fgo:312 メリュジーヌ | fgo:390 メリュジーヌ
+fgo:312,2,False,train,fgo:312 メリュジーヌ | fgo:390 メリュジーヌ
 fgo:315,2,False,train,fgo:315 ハベトロット | fgo:481 ハベトロット
-fgo:32,2,False,val,fgo:32 ジル・ド・レェ | fgo:9 ジル・ド・レェ
+fgo:32,2,False,test,fgo:32 ジル・ド・レェ | fgo:9 ジル・ド・レェ
 fgo:332,2,False,train,fgo:332 ドブルイニャ・ニキチッチ | fgo:419 ドブルイニャ・ニキチッチ
 fgo:345,2,False,train,fgo:345 クリームヒルト | fgo:446 クリームヒルト
 fgo:352,2,False,train,fgo:352 徐福 | fgo:420 徐福
-fgo:365,2,False,val,fgo:365 呼延灼 | fgo:447 呼延灼
+fgo:365,2,False,train,fgo:365 呼延灼 | fgo:447 呼延灼
 fgo:372,2,False,train,fgo:372 テノチティトラン | fgo:422 テノチティトラン
 fgo:376,2,False,train,fgo:376 ラーヴァ／ティアマト | fgo:450 ラーヴァ／ティアマト
 fgo:409,2,False,train,fgo:409 巌窟王　モンテ・クリスト | fgo:96 巌窟王
 fgo:433,2,False,train,fgo:433 ビショーネ | fgo:477 ビショーネ
-fgo:435,2,False,val,fgo:435 小野小町 | fgo:480 小野小町
+fgo:435,2,False,train,fgo:435 小野小町 | fgo:480 小野小町
 fgo:440,2,False,train,fgo:440 リリス | fgo:478 リリス
 fgo:91,2,False,train,fgo:91 両儀式 | fgo:92 両儀式
 starrail:13,2,False,train,starrail:13 ヘルタ | starrail:3285 マダム・ヘルタ
-starrail:4997,2,False,train,starrail:4997 銀狼LV.999 | starrail:710 銀狼
+starrail:4997,2,False,val,starrail:4997 銀狼LV.999 | starrail:710 銀狼

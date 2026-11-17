@@ -5,12 +5,13 @@ Arknights alternate operators, Fate collab characters in Star Rail, ...) form a 
 always lands in one split. Two characters are grouped when they share a voice actor and,
 within one game, one name stem contains the other; across games the stems must be equal.
 
-    main            80/10/10 over groups, stratified by (game, gender). val/test characters
+    main            80/10/10 over groups, stratified by (game, gender). Groups with a multi-voice
+                    character (several CVs, e.g. Gray + Add) always go to train. val/test characters
                     get actor_seen = seen | unseen | unknown (does a train character share a CV?)
                     and train characters get train_frac, the smallest nested subset (0.25 /
                     0.5 / 1.0) that contains them.
     actor_disjoint  80/10/10 over connected components of characters that share any actor
-                    or group, so no voice actor appears in two splits.
+                    or group, so no voice actor appears in two splits (multi-voice: train).
 
 Outputs: splits/main.csv, splits/actor_disjoint.csv, splits/groups.csv (every multi-member
 group, for review) and splits/excluded.csv (characters not eligible, with the reason).
@@ -45,9 +46,12 @@ def name_stem(c: dict) -> str:
 
 
 def actor_ids(c: dict) -> list[str]:
-    """cv_uids of every actor listed on the character (several for joint casts)."""
+    """cv_uids of every actor listed on the character (several for joint casts; only the first
+    for characters marked single_voice in the config)."""
     raw = cv_key_name(c)
-    return sorted({cv_uid(norm_key(p.strip())) for p in MULTI_SEP.split(raw) if p.strip()}) if raw else []
+    parts = [p.strip() for p in MULTI_SEP.split(raw or "") if p.strip()]
+    return sorted({cv_uid(norm_key(p)) for p in parts[:1] if c.get("_single_voice")} or
+                  {cv_uid(norm_key(p)) for p in parts})
 
 
 class UnionFind:
@@ -93,8 +97,9 @@ def find_groups(chars: list[dict], cfg: dict) -> dict[str, str]:
 
 def assign(units: dict[str, list[dict]], strata: dict[str, str], fractions: dict[str, float],
            rng: random.Random) -> dict[str, str]:
-    """{unit id: part}. Within each stratum, units (largest first, random order among equal
-    sizes) go to the part furthest below its target share of characters."""
+    """{unit id: part}. Within each stratum, units holding a multi-voice character go to train
+    first; the others (largest first, random order among equal sizes) go to the part furthest
+    below its target share of characters."""
     by_stratum = defaultdict(list)
     for u in sorted(units):
         by_stratum[strata[u]].append(u)
@@ -102,11 +107,12 @@ def assign(units: dict[str, list[dict]], strata: dict[str, str], fractions: dict
     for s in sorted(by_stratum):
         us = by_stratum[s]
         rng.shuffle(us)
-        us.sort(key=lambda u: -len(units[u]))
+        forced = {u for u in us if any(len(actor_ids(c)) > 1 for c in units[u])}
+        us.sort(key=lambda u: (u not in forced, -len(units[u])))
         count, total = Counter(), 0
         for u in us:
             total += len(units[u])
-            part = max(PARTS, key=lambda p: (fractions[p] * total - count[p], fractions[p]))
+            part = "train" if u in forced else max(PARTS, key=lambda p: (fractions[p] * total - count[p], fractions[p]))
             out[u] = part
             count[part] += len(units[u])
     return out
@@ -143,6 +149,8 @@ def run() -> None:
         chars += keep
         dropped += drop
     chars.sort(key=lambda c: c["char_uid"])
+    for c in chars:
+        c["_single_voice"] = c["char_uid"] in cfg["single_voice"]
     by_uid = {c["char_uid"]: c for c in chars}
     group = find_groups(chars, cfg)
     groups = defaultdict(list)
@@ -173,8 +181,8 @@ def run() -> None:
             frac[g] = next((f for f in sorted(cfg["train_subsets"]) if done <= f * total + 1e-9), 1.0)
 
     OUT.mkdir(exist_ok=True)
-    write_csv(OUT / "main.csv", ["char_uid", "game", "name_ja", "gender", "group_id", "cv_uids", "split", "actor_seen", "train_frac"],
-              [[u, c["game"], c["name_ja"], c["gender"], group[u], "|".join(actor_ids(c)), part[u],
+    write_csv(OUT / "main.csv", ["char_uid", "game", "name_ja", "gender", "group_id", "cv_uids", "multi_voice", "split", "actor_seen", "train_frac"],
+              [[u, c["game"], c["name_ja"], c["gender"], group[u], "|".join(actor_ids(c)), len(actor_ids(c)) > 1, part[u],
                 seen(c) if part[u] != "train" else "", frac.get(group[u], "") if part[u] == "train" else ""]
                for u, c in by_uid.items()])
 
