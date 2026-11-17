@@ -8,7 +8,7 @@
 | azurlane | 857 | 2362 | 39615 | 38253 | 96.31 h | 100% / 0% / 0% / 0% |
 | bluearchive | 148 | 277 | 18607 | 14951 | 24.55 h | 100% / 0% / 0% / 0% |
 | fgo | 471 | 620 | 45829 | 31677 | 89.59 h | 61% / 35% / 0% / 4% |
-| genshin | 126 | 126 | 13886 | 13524 | 44.06 h | 65% / 35% / 0% / 0% |
+| genshin | 128 | 128 | 14035 | 13662 | 44.67 h | 64% / 34% / 0% / 2% |
 | girlsfrontline | 387 | 1100 | 12508 | 12114 | 19.82 h | 100% / 0% / 0% / 0% |
 | starrail | 89 | 92 | 4977 | 4756 | 10.31 h | 66% / 33% / 0% / 1% |
 | umamusume | 115 | 218 | 19635 | 19602 | 29.17 h | 100% / 0% / 0% / 0% |
@@ -17,7 +17,7 @@
 
 ## Voice actors
 
-Distinct voice actors: 871 (cross-game: 418; needs_review: 90). See manifests/voice_actors.csv.
+Distinct voice actors: 871 (cross-game: 418; needs_review: 87). See manifests/voice_actors.csv.
 
 ### Top 30 voice actors by number of characters
 
@@ -25,7 +25,7 @@ Distinct voice actors: 871 (cross-game: 418; needs_review: 90). See manifests/vo
 |---|---|---|---|
 | 川澄綾子 | 24 | arknights|azurlane|fgo|genshin|girlsfrontline|starrail | シージ、ヴィーナ・ヴィクトリア、キング・ジョージ5世、アルトリア・ペンドラゴン、アルトリア・ペンドラゴン〔オルタ〕、アルトリア・ペンドラゴン〔リリィ〕、アルトリ |
 | 佐倉綾音 | 21 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|starrail | ニアール、耀騎士ニアール、ゴールデングロー、プリンツ・オイゲンちゃん、プリンツ・オイゲン、サラァナ、ウルゥル、エーギルちゃん、プリンツ・オイゲン(μ兵装)、エー |
-| 悠木碧 | 19 | arknights|azurlane|fgo|genshin|girlsfrontline|wuwa | アーススピリット、イースチナ、ニェン、大鳳、大鳳ちゃん、大鳳(META)、大鳳(μ兵装)、沖田総司、酒呑童子、沖田総司〔オルタ〕、ジナコ＝カリギリ、伊吹童子、ラ |
+| 悠木碧 | 20 | arknights|azurlane|fgo|genshin|girlsfrontline|wuwa | アーススピリット、イースチナ、ニェン、大鳳、大鳳ちゃん、大鳳(META)、大鳳(μ兵装)、沖田総司、酒呑童子、沖田総司〔オルタ〕、ジナコ＝カリギリ、伊吹童子、ラ |
 | 斎藤千和 | 19 | arknights|azurlane|bluearchive|fgo|genshin|starrail|wuwa|zenless | メイヤー、足柄、金剛、金剛(μ兵装)、狐坂ワカモ、シュヴァリエ・デオン、ブーディカ、タマモキャット、玉藻の前、クロエ・フォン・アインツベルン、光のコヤンスカヤ、 |
 | 能登麻美子 | 19 | arknights|azurlane|fgo|genshin|girlsfrontline|wuwa|zenless | リード、焔影リード、ネクラス、信濃、ヴィットリオ・ヴェネト、信濃ちゃん、アルテラ、スカサハ、ブリュンヒルデ、アルテラ・ザ・サン〔タ〕、浅上藤乃、スカサハ＝スカデ |
 | 石見舞菜香 | 18 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|starrail|umamusume|wuwa|zenless | ワルファリン、エクシア、新約エクシア、鎮海、フレッチャー、ペンサコーラ、ソルトレイクシティ、U-110、橘ヒカリ、呼延灼、アンバー、SIG-556、CF-05、 |
@@ -40,8 +40,8 @@ Distinct voice actors: 871 (cross-game: 418; needs_review: 90). See manifests/vo
 | 金元寿子 | 14 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|wuwa | フィリオプシス、ブラック・プリンス、神通、ケント、神通(META)、赤司ジュンコ、エレナ・ブラヴァツキー、巴御前、ニィロウ、Saiga-12、PzB39、千咲 |
 | 坂本真綾 | 13 | fgo | アレキサンダー、ジャンヌ・ダルク、両儀式、ジャンヌ・ダルク〔オルタ〕、レオナルド・ダ・ヴィンチ、ジャンヌ・ダルク・オルタ・サンタ・リリィ、メタトロン・ジャンヌ、 |
 | 小清水亜美 | 13 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|wuwa|zenless | ズィマー、レッド、扶桑、扶桑(META)、山城、山城(META)、美甘ネル、アムール〔カレン〕、北斗、Gr G36、Gr MG5、吟霖、星見雅 |
+| 石川由依 | 13 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|starrail|wuwa | リスカム、ナイチンゲール、リトル・エンタープライズ、エンタープライズ、飛鳥馬トキ、モルガン、雨の魔女トネリコ、岸波白野、クロリンデ、フェドロフ、星、秧秧、秧秧・ |
 | 鬼頭明里 | 13 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|umamusume|zenless | サイレンス、淬羽サイレンス、阿武隈、はっす、五十鈴、長良、静山マシロ、宇津見エリセ、バーバラ、AK-Alfa、セイウンスカイ、プロメイア |
-| 石川由依 | 12 | arknights|azurlane|bluearchive|fgo|genshin|girlsfrontline|starrail|wuwa | リスカム、ナイチンゲール、リトル・エンタープライズ、エンタープライズ、飛鳥馬トキ、モルガン、雨の魔女トネリコ、岸波白野、クロリンデ、フェドロフ、秧秧、秧秧・玄翎 |
 | 小倉唯 | 12 | arknights|azurlane|bluearchive|fgo|girlsfrontline|starrail|umamusume | ロスモンティス、伊19、夕張、砂狼シロコ、パッションリップ、哪吒、M200、デザートイーグル、三月なのか、長夜月、マンハッタンカフェ |
 | 戸松遥 | 12 | arknights|azurlane|fgo|girlsfrontline|starrail|wuwa | サイラッハ、ララ・サタリン・デビルーク、ソビエツキー・ソユーズ、源頼光、源頼光／丑御前、蒼崎青子、WA2000、リー・エンフィールド、M4A1、星神★アッハ、緋 |
 | 諏訪彩花 | 12 | arknights|azurlane|fgo|girlsfrontline|wuwa|zenless | ガヴィル、クオーラ、マンティコア、百錬ガヴィル、アリシューザ、ガラティア、ムジナ、U-522、ククルカン、ネゲヴ、ショアキーパー、橘福福 |
@@ -215,25 +215,25 @@ min 0, p25 75, median 122, p75 134, max 236
 | 1–9 | 0 |
 | 10–29 | 0 |
 | 30–59 | 0 |
-| 60–99 | 50 |
+| 60–99 | 52 |
 | 100+ | 72 |
 
 ## genshin: exclusion reasons
 
 | reason | clips flagged | sole reason |
 |---|---|---|
-| battle_shout | 352 | 352 |
+| battle_shout | 363 | 363 |
 | duplicate_audio | 6 | 6 |
 | non_japanese | 4 | 4 |
 
-Duration flags (not excluded): short (<1 s) 923, long (>15 s) 3404; of these, usable: short 778, long 3402.
+Duration flags (not excluded): short (<1 s) 934, long (>15 s) 3457; of these, usable: short 782, long 3455.
 
 ## genshin: characters with missing fields
 
 | char_uid | name_ja | missing |
 |---|---|---|
-| genshin:11828 | バレリー | cv, image, usable_clips |
-| genshin:11827 | ミティヤ | cv, image, usable_clips |
+| genshin:13836 | ダニカ | cv, gender, image, usable_clips |
+| genshin:13830 | アナスターシャ | cv, gender, image, usable_clips |
 | genshin:9021 | ドール（女） | usable_clips |
 | genshin:9020 | ドール（男） | usable_clips |
 

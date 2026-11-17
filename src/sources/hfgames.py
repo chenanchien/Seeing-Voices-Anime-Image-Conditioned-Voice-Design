@@ -229,9 +229,9 @@ def apply_groups(meta: list[dict], groups: list[dict]) -> list[dict]:
             if shared[id(m)] == 1:
                 voices += [v | {"outfit": outfit} for v in m.get("voice_lines", [])]
         first = lambda k: next((m[k] for m in pages if m[k]), None)
-        out.append({"id": g["name"], "name_zh": g["name"], "name_ja": first("name_ja"), "name_en": first("name_en"),
+        out.append({"id": g["name"], "name_zh": g["name"], "name_ja": g.get("name_ja") or first("name_ja"), "name_en": first("name_en"),
                     "gender_raw": first("gender_raw"), "gender_override": g.get("gender"),
-                    "cv_name_ja": first("cv_name_ja"), "images": images, "profile_texts": texts,
+                    "cv_name_ja": g.get("cv_name_ja") or first("cv_name_ja"), "images": images, "profile_texts": texts,
                     "source_urls": [u for m in pages for u in m["source_urls"]],
                     "speakers": g["speakers"], "pages": [m["name_zh"] for m in pages], "voice_lines": voices})
     for m in meta:

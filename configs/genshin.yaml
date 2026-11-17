@@ -20,8 +20,10 @@ category_norm:   # applied to character_vo; story -> other
   default: daily
 battle_shout: '_hit|_attack|_battle_(?:dash|jump|climb|glide)'
 groups:   # one dataset character built from several wiki pages / routed to specific HF speakers
-  - {name: 空, page_prefix: 旅行者, speakers: [空]}
-  - {name: 荧, page_prefix: 旅行者, speakers: [荧]}
+  # the 旅行者 pages list both twins' CVs (堀江瞬&悠木碧) and an element-specific name; each
+  # twin speaks with one of them (official casting), so name and CV are set here
+  - {name: 空, name_ja: 空, cv_name_ja: 堀江瞬, page_prefix: 旅行者, speakers: [空]}
+  - {name: 荧, name_ja: 蛍, cv_name_ja: 悠木碧, page_prefix: 旅行者, speakers: [荧]}
 
 # story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet
 include_story: false

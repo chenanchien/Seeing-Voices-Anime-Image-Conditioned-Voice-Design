@@ -25,8 +25,9 @@ groups:   # one dataset character built from several wiki pages / routed to spec
   - {name: 知更鸟, pages: [知更鸟, 知更鸟•晴歌], speakers: [知更鸟]}
   - {name: 姬子, pages: [姬子, 姬子•启行], speakers: [姬子]}
   # player character: one page set, two voices (HF speaker labels)
-  - {name: 开拓者(女), page_prefix: 开拓者, speakers: [开拓者(女)]}
-  - {name: 开拓者(男), page_prefix: 开拓者, speakers: [开拓者(男)]}
+  # the 开拓者 pages list both CVs (榎木淳弥/石川由依); each Trailblazer speaks with one (official casting)
+  - {name: 开拓者(女), name_ja: 星, cv_name_ja: 石川由依, page_prefix: 开拓者, speakers: [开拓者(女)]}
+  - {name: 开拓者(男), name_ja: 穹, cv_name_ja: 榎木淳弥, page_prefix: 开拓者, speakers: [开拓者(男)]}
   # 丹恒•饮月 / 丹恒•腾荒 are different forms (like FGO/Arknights alters): kept separate
 
 # story dialogue skipped for now (owner decision 2026-10-28); still listed in hf_index.parquet

@@ -1,0 +1,15 @@
+# Fixed train/val/test splits (src.splits). Changing anything here changes the splits:
+# rerun `python -m src.splits` and commit splits/ together with this file.
+seed: 10423
+fractions: {train: 0.8, val: 0.1, test: 0.1}
+train_subsets: [0.25, 0.5]          # nested subsets of main/train for the data-size experiment
+
+eligible:
+  min_images: 1                     # images present on disk
+  min_nonbattle_clips: 5            # usable clips with category_norm != battle (prototype source)
+
+# Character groups (versions of one character always share a split) are found automatically:
+# same voice actor and, within one game, one name stem contains the other; across games,
+# equal name stems. Overrides, as lists of char_uids:
+merge: []                           # [[uid, uid, ...], ...] put these in one group
+separate: []                        # [[uid, uid], ...] never group these two directly

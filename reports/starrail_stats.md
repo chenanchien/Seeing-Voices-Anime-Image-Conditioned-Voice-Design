@@ -40,7 +40,7 @@ Duration flags (not excluded): short (<1 s) 192, long (>15 s) 855; of these, usa
 
 ## name_ja shared by several characters (kept separate)
 
-開拓者・愉悦
+_none_
 
 ## Characters with missing fields
 

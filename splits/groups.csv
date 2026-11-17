@@ -1,0 +1,207 @@
+group_id,size,cross_game,split,members
+fgo:119,9,False,train,fgo:119 アルトリア・ペンドラゴン | fgo:129 アルトリア・ペンドラゴン | fgo:179 アルトリア・ペンドラゴン〔オルタ〕 | fgo:2 アルトリア・ペンドラゴン | fgo:265 アルトリア・ペンドラゴン | fgo:3 アルトリア・ペンドラゴン〔オルタ〕 | fgo:4 アルトリア・ペンドラゴン〔リリィ〕 | fgo:73 アルトリア・ペンドラゴン〔サンタオルタ〕 | fgo:78 アルトリア・ペンドラゴン〔オルタ〕
+fgo:106,5,False,train,fgo:106 ジャンヌ・ダルク〔オルタ〕 | fgo:141 ジャンヌ・ダルク・オルタ・サンタ・リリィ | fgo:216 ジャンヌ・ダルク | fgo:219 ジャンヌ・ダルク〔オルタ〕 | fgo:59 ジャンヌ・ダルク
+fgo:138,5,False,val,fgo:138 エリザベート・バートリー〔ブレイブ〕 | fgo:18 エリザベート・バートリー | fgo:326 エリザベート・バートリー〔シンデレラ〕 | fgo:457 エリザベート・バートリー | fgo:61 エリザベート・バートリー〔ハロウィン〕
+azurlane:10209,4,False,train,azurlane:10209 クリーブランド | azurlane:10220 リトル・クリーブランド | azurlane:10224 クリーブランド(μ兵装) | azurlane:970209 クリーブランド(META)
+azurlane:1040001,4,False,train,azurlane:1040001 キズナアイ | azurlane:1040002 キズナアイ・エレガント | azurlane:1040003 キズナアイ・アニバーサリー | azurlane:1040004 キズナアイ・スーパーゲーマー
+azurlane:30707,4,False,train,azurlane:30707 大鳳 | azurlane:30711 大鳳(μ兵装) | azurlane:30713 大鳳ちゃん | azurlane:970705 大鳳(META)
+fgo:133,4,False,test,fgo:133 スカサハ | fgo:215 スカサハ＝スカディ | fgo:357 スカサハ＝スカディ | fgo:70 スカサハ
+fgo:155,4,False,train,fgo:155 謎のヒロインX〔オルタ〕 | fgo:222 謎のヒロインXX | fgo:423 謎のヒロインXX〔オルタ〕 | fgo:86 謎のヒロインX
+fgo:209,4,False,train,fgo:209 沖田総司〔オルタ〕 | fgo:267 沖田総司 | fgo:317 沖田総司〔オルタ〕 | fgo:68 沖田総司
+azurlane:10205,3,False,train,azurlane:10205 ヘレナ | azurlane:10219 リトル・ヘレナ | azurlane:970201 ヘレナ(META)
+azurlane:10229,3,False,train,azurlane:10229 ボイシ | azurlane:10232 ボイシ(μ兵装) | azurlane:970208 ボイシ(META)
+azurlane:10705,3,False,train,azurlane:10705 ヨークタウン | azurlane:10710 ヨークタウンⅡ | azurlane:970708 ヨークタウン(META)
+azurlane:10707,3,False,val,azurlane:10707 ホーネット | azurlane:10712 ホーネットⅡ | azurlane:970706 ホーネット(META)
+azurlane:20208,3,False,train,azurlane:20208 シェフィールド | azurlane:20225 シェフィールド(μ兵装) | azurlane:970203 シェフィールド(META)
+azurlane:20703,3,False,train,azurlane:20703 イラストリアス | azurlane:20709 リトル・イラストリアス | azurlane:20711 イラストリアス(μ兵装)
+azurlane:20705,3,False,val,azurlane:20705 フォーミダブル | azurlane:20713 リトル・フォーミダブル | azurlane:20714 フォーミダブル(μ兵装)
+azurlane:30402,3,False,test,azurlane:30402 比叡 | azurlane:30406 比叡ちゃん | azurlane:970405 比叡(META)
+azurlane:30405,3,False,train,azurlane:30405 天城 | azurlane:30407 天城ちゃん | azurlane:30715 天城(空母)
+azurlane:30701,3,False,train,azurlane:30701 赤城 | azurlane:30709 赤城ちゃん | azurlane:30710 赤城(μ兵装)
+azurlane:40303,3,False,train,azurlane:40303 プリンツ・オイゲン | azurlane:40312 プリンツ・オイゲンちゃん | azurlane:40315 プリンツ・オイゲン(μ兵装)
+fgo:114,3,False,val,fgo:114 源頼光 | fgo:181 源頼光 | fgo:403 源頼光／丑御前
+fgo:12,3,True,train,fgo:12 ギルガメッシュ | fgo:145 ギルガメッシュ | starrail:5338 ギルガメッシュ
+fgo:120,3,False,train,fgo:120 ニトクリス | fgo:177 ニトクリス | fgo:370 ニトクリス〔オルタ〕
+fgo:127,3,False,train,fgo:127 レオナルド・ダ・ヴィンチ | fgo:253 レオナルド・ダ・ヴィンチ | fgo:320 レオナルド・ダ・ヴィンチ
+fgo:130,3,False,train,fgo:130 マリー・アントワネット | fgo:29 マリー・アントワネット | fgo:407 マリー・アントワネット〔オルタ〕
+fgo:135,3,False,train,fgo:135 マルタ | fgo:30 マルタ | fgo:330 マルタ〔サンタ〕
+fgo:142,3,False,train,fgo:142 イシュタル | fgo:182 イシュタル | fgo:268 スペース・イシュタル
+fgo:146,3,False,train,fgo:146 メドゥーサ | fgo:23 メドゥーサ | fgo:384 メドゥーサ
+fgo:166,3,False,train,fgo:166 ＢＢ | fgo:220 ＢＢ | fgo:421 ＢＢドバイ
+fgo:17,3,False,train,fgo:17 クー・フーリン | fgo:38 クー・フーリン | fgo:98 クー・フーリン〔オルタ〕
+fgo:175,3,False,train,fgo:175 ネロ・クラウディウス | fgo:5 ネロ・クラウディウス | fgo:90 ネロ・クラウディウス〔ブライド〕
+fgo:195,3,False,test,fgo:195 アビゲイル・ウィリアムズ | fgo:289 アビゲイル・ウィリアムズ〔夏〕 | fgo:430 アビゲイル・ウィリアムズ〔サンタ〕
+fgo:238,3,False,train,fgo:238 キングプロテア | fgo:476 キングプロテア | fgo:479 キングプロテア・オルタ
+fgo:243,3,False,train,fgo:243 グレイ | fgo:472 グレイ・リリィ | fgo:473 グレイ・リリィ
+fgo:296,3,False,train,fgo:296 ネモ | fgo:401 ネモ〔サンタ〕 | fgo:452 ネモ／ノア
+starrail:1226,3,False,train,starrail:1226 丹恒・飲月 | starrail:3957 丹恒・騰荒 | starrail:8 丹恒
+arknights:char_010_chen,2,False,test,arknights:char_010_chen チェン | arknights:char_1013_chen2 遊龍チェン
+arknights:char_017_huang,2,False,test,arknights:char_017_huang ブレイズ | arknights:char_1040_blaze2 熾炎ブレイズ
+arknights:char_1011_lava2,2,False,train,arknights:char_1011_lava2 炎獄ラヴァ | arknights:char_121_lava ラヴァ
+arknights:char_1012_skadi2,2,False,train,arknights:char_1012_skadi2 濁心スカジ | arknights:char_263_skadi スカジ
+arknights:char_1014_nearl2,2,False,train,arknights:char_1014_nearl2 耀騎士ニアール | arknights:char_148_nearl ニアール
+arknights:char_1016_agoat2,2,False,train,arknights:char_1016_agoat2 純燼エイヤフィヤトラ | arknights:char_180_amgoat エイヤフィヤトラ
+arknights:char_1020_reed2,2,False,val,arknights:char_1020_reed2 焔影リード | arknights:char_261_sddrag リード
+arknights:char_1021_kroos2,2,False,train,arknights:char_1021_kroos2 寒芒クルース | arknights:char_124_kroos クルース
+arknights:char_1023_ghost2,2,False,train,arknights:char_1023_ghost2 帰溟スペクター | arknights:char_143_ghost スペクター
+arknights:char_1024_hbisc2,2,False,train,arknights:char_1024_hbisc2 濯塵ハイビスカス | arknights:char_120_hibisc ハイビスカス
+arknights:char_1026_gvial2,2,False,train,arknights:char_1026_gvial2 百錬ガヴィル | arknights:char_187_ccheal ガヴィル
+arknights:char_1027_greyy2,2,False,train,arknights:char_1027_greyy2 承曦グレイ | arknights:char_253_greyy グレイ
+arknights:char_1028_texas2,2,False,train,arknights:char_1028_texas2 血掟テキサス | arknights:char_102_texas テキサス
+arknights:char_1029_yato2,2,False,train,arknights:char_1029_yato2 キリンRヤトウ | arknights:char_502_nblade ヤトウ
+arknights:char_1030_noirc2,2,False,train,arknights:char_1030_noirc2 レウスSノイルホーン | arknights:char_500_noirc ノイルホーン
+arknights:char_1031_slent2,2,False,train,arknights:char_1031_slent2 淬羽サイレンス | arknights:char_108_silent サイレンス
+arknights:char_1032_excu2,2,False,val,arknights:char_1032_excu2 聖約イグゼキュター | arknights:char_279_excu イグゼキュター
+arknights:char_1033_swire2,2,False,train,arknights:char_1033_swire2 琳琅スワイヤー | arknights:char_308_swire スワイヤー
+arknights:char_1034_jesca2,2,False,val,arknights:char_1034_jesca2 滌火ジェシカ | arknights:char_235_jesica ジェシカ
+arknights:char_1036_fang2,2,False,train,arknights:char_1036_fang2 歴陣鋭槍フェン | arknights:char_123_fang フェン
+arknights:char_1038_whitw2,2,False,train,arknights:char_1038_whitw2 荒蕪ラップランド | arknights:char_140_whitew ラップランド
+arknights:char_1039_thorn2,2,False,train,arknights:char_1039_thorn2 引星ソーンズ | arknights:char_293_thorns ソーンズ
+arknights:char_103_angel,2,False,train,arknights:char_103_angel エクシア | arknights:char_1041_angel2 新約エクシア
+azurlane:10102,2,False,test,azurlane:10102 デューイ | azurlane:970110 デューイ(META)
+azurlane:10117,2,False,train,azurlane:10117 ラフィー | azurlane:10151 ラフィーⅡ
+azurlane:10125,2,False,train,azurlane:10125 ハムマン | azurlane:10150 ハムマンⅡ
+azurlane:10138,2,False,train,azurlane:10138 キンバリー | azurlane:970104 キンバリー(META)
+azurlane:10208,2,False,train,azurlane:10208 サンディエゴ | azurlane:10221 リトル・サンディエゴ
+azurlane:10216,2,False,train,azurlane:10216 メンフィス | azurlane:970202 メンフィス(META)
+azurlane:10231,2,False,val,azurlane:10231 ヒューストンⅡ | azurlane:10305 ヒューストン
+azurlane:10303,2,False,train,azurlane:10303 ノーザンプトン | azurlane:10326 ノーザンプトンⅡ
+azurlane:10311,2,False,test,azurlane:10311 ウィチタ | azurlane:970304 ウィチタ(META)
+azurlane:10316,2,False,train,azurlane:10316 ボルチモア | azurlane:10325 ボルチモア(μ兵装)
+azurlane:10329,2,False,val,azurlane:10329 リトル・アンカレッジ | azurlane:19903 アンカレッジ
+azurlane:10501,2,False,test,azurlane:10501 ネバダ | azurlane:970509 ネバダ(META)
+azurlane:10504,2,False,train,azurlane:10504 アリゾナ | azurlane:970503 アリゾナ(META)
+azurlane:10701,2,False,val,azurlane:10701 ラングレー | azurlane:10727 ラングレーⅡ
+azurlane:10702,2,False,test,azurlane:10702 レキシントン | azurlane:10716 レキシントンⅡ
+azurlane:10706,2,False,train,azurlane:10706 エンタープライズ | azurlane:10799 リトル・エンタープライズ
+azurlane:10723,2,False,train,azurlane:10723 プリンストン | azurlane:970603 プリンストン(META)
+azurlane:10802,2,False,train,azurlane:10802 アルバコア | azurlane:10805 アルバコア(μ兵装)
+azurlane:11201,2,False,train,azurlane:11201 ヴェスタル | azurlane:971201 ヴェスタル(META)
+azurlane:20112,2,False,train,azurlane:20112 フォーチュン | azurlane:970102 フォーチュン(META)
+azurlane:20113,2,False,val,azurlane:20113 グレンヴィル | azurlane:970107 グレンヴィル(META)
+azurlane:20120,2,False,train,azurlane:20120 ハンター | azurlane:970101 ハンター(META)
+azurlane:20123,2,False,train,azurlane:20123 ヴァンパイア | azurlane:970105 ヴァンパイア(META)
+azurlane:20204,2,False,train,azurlane:20204 ダイドー | azurlane:20228 ダイドー(μ兵装)
+azurlane:20212,2,False,train,azurlane:20212 ベルファスト | azurlane:20218 ベルちゃん
+azurlane:20310,2,False,train,azurlane:20310 リトル・チェシャー | azurlane:29903 チェシャー
+azurlane:20401,2,False,train,azurlane:20401 レナウン | azurlane:20404 リトル・レナウン
+azurlane:20402,2,False,train,azurlane:20402 レパルス | azurlane:970403 レパルス(META)
+azurlane:20501,2,False,train,azurlane:20501 クイーン・エリザベス | azurlane:970504 クイーン・エリザベス(META)
+azurlane:20504,2,False,train,azurlane:20504 ロドニー | azurlane:970505 ロドニー(META)
+azurlane:20702,2,False,test,azurlane:20702 アーク・ロイヤル | azurlane:970702 アーク・ロイヤル(META)
+azurlane:20706,2,False,val,azurlane:20706 グロリアス | azurlane:970707 グロリアス(META)
+azurlane:21301,2,False,train,azurlane:21301 エレバス | azurlane:971301 エレバス(META)
+azurlane:30114,2,False,train,azurlane:30114 夕立 | azurlane:970109 夕立(META)
+azurlane:30149,2,False,train,azurlane:30149 江風 | azurlane:970108 江風(META)
+azurlane:30179,2,False,train,azurlane:30179 旗風 | azurlane:970103 旗風(META)
+azurlane:30213,2,False,train,azurlane:30213 神通 | azurlane:970205 神通(META)
+azurlane:30221,2,False,train,azurlane:30221 能代 | azurlane:30224 能代(μ兵装)
+azurlane:30401,2,False,train,azurlane:30401 金剛 | azurlane:30408 金剛(μ兵装)
+azurlane:30501,2,False,test,azurlane:30501 扶桑 | azurlane:970501 扶桑(META)
+azurlane:30502,2,False,train,azurlane:30502 山城 | azurlane:970502 山城(META)
+azurlane:30505,2,False,train,azurlane:30505 長門 | azurlane:970506 長門(META)
+azurlane:30507,2,False,train,azurlane:30507 加賀 | azurlane:30702 加賀
+azurlane:30601,2,False,train,azurlane:30601 飛鷹 | azurlane:970601 飛鷹(META)
+azurlane:30602,2,False,train,azurlane:30602 隼鷹 | azurlane:970602 隼鷹(META)
+azurlane:30603,2,False,train,azurlane:30603 鳳翔 | azurlane:970604 鳳翔(META)
+azurlane:30703,2,False,train,azurlane:30703 蒼龍 | azurlane:970703 蒼龍(META)
+azurlane:30704,2,False,train,azurlane:30704 飛龍 | azurlane:970701 飛龍(META)
+azurlane:30708,2,False,train,azurlane:30708 信濃 | azurlane:30714 信濃ちゃん
+azurlane:40203,2,False,val,azurlane:40203 ケルン | azurlane:970210 ケルン(META)
+azurlane:40210,2,False,train,azurlane:40210 レーゲンスブルク | azurlane:970211 レーゲンスブルク(META)
+azurlane:40301,2,False,train,azurlane:40301 アドミラル・ヒッパー | azurlane:970305 アドミラル・ヒッパー(META)
+azurlane:40305,2,False,train,azurlane:40305 アドミラル・グラーフ・シュペー | azurlane:40313 シュペーちゃん
+azurlane:40308,2,False,train,azurlane:40308 ローン(μ兵装) | azurlane:49901 ローン
+azurlane:40316,2,False,train,azurlane:40316 エーギルちゃん | azurlane:49905 エーギル
+azurlane:40401,2,False,train,azurlane:40401 シャルンホルスト | azurlane:970402 シャルンホルスト(META)
+azurlane:40402,2,False,train,azurlane:40402 グナイゼナウ | azurlane:970401 グナイゼナウ(META)
+azurlane:40501,2,False,train,azurlane:40501 ビスマルク | azurlane:40505 ビスマルクZwei
+azurlane:40506,2,False,train,azurlane:40506 フリードリヒちゃん | azurlane:49902 フリードリヒ・デア・グローセ
+azurlane:40701,2,False,train,azurlane:40701 グラーフ・ツェッペリン | azurlane:40702 ツェッペリンちゃん
+azurlane:40804,2,False,train,azurlane:40804 U-556 | azurlane:970801 U-556(META)
+azurlane:60102,2,False,train,azurlane:60102 カラビニエーレ | azurlane:970111 カラビニエーレ(META)
+azurlane:60301,2,False,train,azurlane:60301 トレント | azurlane:970301 トレント(META)
+azurlane:60305,2,False,train,azurlane:60305 ボルツァーノ | azurlane:970306 ボルツァーノ(META)
+azurlane:60506,2,False,val,azurlane:60506 ジュリオ・チェザーレ | azurlane:970507 ジュリオ・チェザーレ(META)
+azurlane:60507,2,False,test,azurlane:60507 アンドレア・ドーリア | azurlane:970508 アンドレア・ドーリア(META)
+azurlane:70104,2,False,train,azurlane:70104 タシュケント | azurlane:70105 タシュケント(μ兵装)
+azurlane:70202,2,False,test,azurlane:70202 パーミャチ・メルクーリヤ | azurlane:970207 パーミャチ・メルクーリヤ(META)
+azurlane:70204,2,False,train,azurlane:70204 キーロフ | azurlane:970206 キーロフ(META)
+azurlane:70501,2,False,train,azurlane:70501 ガングート | azurlane:970510 ガングート(META)
+azurlane:80103,2,False,train,azurlane:80103 ル・テメレール | azurlane:80109 ル・テメレール(μ兵装)
+azurlane:80701,2,False,train,azurlane:80701 ベアルン | azurlane:970704 ベアルン(META)
+azurlane:90111,2,False,train,azurlane:90111 ル・マラン | azurlane:90112 ル・マラン(μ兵装)
+azurlane:90201,2,False,train,azurlane:90201 ラ・ガリソニエール | azurlane:970204 ラ・ガリソニエール(META)
+azurlane:90301,2,False,train,azurlane:90301 フォッシュ | azurlane:970303 フォッシュ(META)
+azurlane:90401,2,False,train,azurlane:90401 ダンケルク | azurlane:970406 ダンケルク(META)
+azurlane:90503,2,False,train,azurlane:90503 ガスコーニュ(μ兵装) | azurlane:99901 ガスコーニュ
+fgo:100,2,False,train,fgo:100 エレナ・ブラヴァツキー | fgo:180 エレナ・ブラヴァツキー
+fgo:102,2,False,test,fgo:102 李書文 | fgo:235 李書文
+fgo:11,2,False,train,fgo:11 エミヤ | fgo:157 エミヤ〔オルタ〕
+fgo:112,2,False,test,fgo:112 酒呑童子 | fgo:225 酒呑童子
+fgo:115,2,False,train,fgo:115 坂田金時 | fgo:51 坂田金時
+fgo:116,2,False,train,fgo:116 茨木童子 | fgo:217 茨木童子
+fgo:128,2,False,train,fgo:128 玉藻の前 | fgo:62 玉藻の前
+fgo:131,2,False,train,fgo:131 アン・ボニー＆メアリー・リード | fgo:66 アン・ボニー＆メアリー・リード
+fgo:132,2,False,train,fgo:132 モードレッド | fgo:76 モードレッド
+fgo:134,2,False,train,fgo:134 清姫 | fgo:56 清姫
+fgo:136,2,False,train,fgo:136 イリヤスフィール・フォン・アインツベルン | fgo:286 イリヤスフィール・フォン・アインツベルン
+fgo:137,2,False,train,fgo:137 クロエ・フォン・アインツベルン | fgo:388 クロエ・フォン・アインツベルン
+fgo:14,2,False,train,fgo:14 アタランテ | fgo:202 アタランテ〔オルタ〕
+fgo:144,2,False,val,fgo:144 ケツァル・コアトル | fgo:233 ケツァル・コアトル〔サンバ／サンタ〕
+fgo:153,2,False,train,fgo:153 宮本武蔵 | fgo:261 宮本武蔵
+fgo:164,2,False,test,fgo:164 パッションリップ | fgo:445 パッションリップ
+fgo:165,2,False,train,fgo:165 鈴鹿御前 | fgo:387 鈴鹿御前〔サマバケ〕
+fgo:167,2,False,train,fgo:167 殺生院キアラ | fgo:285 殺生院キアラ
+fgo:170,2,False,test,fgo:170 武則天 | fgo:358 武則天
+fgo:176,2,False,train,fgo:176 フランケンシュタイン | fgo:82 フランケンシュタイン
+fgo:178,2,False,train,fgo:178 織田信長 | fgo:69 織田信長
+fgo:184,2,False,train,fgo:184 巴御前 | fgo:290 巴御前
+fgo:189,2,False,train,fgo:189 刑部姫 | fgo:262 刑部姫
+fgo:190,2,False,train,fgo:190 メカエリチャン | fgo:191 メカエリチャンⅡ号機
+fgo:196,2,False,train,fgo:196 エレシュキガル | fgo:417 エレシュキガル
+fgo:197,2,False,train,fgo:197 アルテラ・ザ・サン〔タ〕 | fgo:8 アルテラ
+fgo:198,2,False,test,fgo:198 葛飾北斎 | fgo:264 葛飾北斎
+fgo:201,2,False,train,fgo:201 アナスタシア | fgo:318 アナスタシア＆ヴィイ
+fgo:211,2,False,train,fgo:211 坂本龍馬 | fgo:329 坂本龍馬
+fgo:218,2,False,val,fgo:218 牛若丸 | fgo:27 牛若丸
+fgo:22,2,False,train,fgo:22 ロムルス | fgo:280 ロムルス＝クィリヌス
+fgo:221,2,False,train,fgo:221 女王メイヴ | fgo:99 女王メイヴ
+fgo:223,2,False,train,fgo:223 ディルムッド・オディナ | fgo:71 ディルムッド・オディナ
+fgo:230,2,False,train,fgo:230 虞美人 | fgo:288 虞美人
+fgo:234,2,False,train,fgo:234 紅閻魔 | fgo:475 紅閻魔
+fgo:236,2,False,train,fgo:236 美遊・エーデルフェルト | fgo:449 美遊・エーデルフェルト
+fgo:237,2,False,test,fgo:237 紫式部 | fgo:291 紫式部
+fgo:239,2,False,train,fgo:239 カーマ | fgo:321 カーマ
+fgo:247,2,False,train,fgo:247 アルジュナ〔オルタ〕 | fgo:84 アルジュナ
+fgo:256,2,False,train,fgo:256 ガレス | fgo:354 ガレス
+fgo:259,2,False,train,fgo:259 シャルロット・コルデー | fgo:319 シャルロット・コルデー
+fgo:263,2,False,train,fgo:263 カーミラ | fgo:46 カーミラ
+fgo:270,2,False,train,fgo:270 アストルフォ | fgo:94 アストルフォ
+fgo:271,2,False,train,fgo:271 ナイチンゲール〔サンタ〕 | fgo:97 ナイチンゲール
+fgo:272,2,False,val,fgo:272 超人オリオン | fgo:60 オリオン
+fgo:276,2,False,train,fgo:276 清少納言 | fgo:323 清少納言
+fgo:279,2,False,train,fgo:279 カイニス | fgo:322 カイニス
+fgo:283,2,False,train,fgo:283 宇津見エリセ | fgo:356 宇津見エリセ
+fgo:284,2,False,train,fgo:284 アルトリア・キャスター | fgo:386 アルトリア・キャスター
+fgo:287,2,False,train,fgo:287 ブリュンヒルデ | fgo:88 ブリュンヒルデ
+fgo:295,2,False,train,fgo:295 ヴァン・ゴッホ | fgo:428 ヴァン・ゴッホ〔マイナー〕
+fgo:299,2,False,train,fgo:299 伊吹童子 | fgo:355 伊吹童子
+fgo:301,2,False,train,fgo:301 カルナ〔サンタ〕 | fgo:85 カルナ
+fgo:310,2,False,train,fgo:310 バーゲスト | fgo:391 ＵＤＫ－バーゲスト
+fgo:312,2,False,val,fgo:312 メリュジーヌ | fgo:390 メリュジーヌ
+fgo:315,2,False,train,fgo:315 ハベトロット | fgo:481 ハベトロット
+fgo:32,2,False,val,fgo:32 ジル・ド・レェ | fgo:9 ジル・ド・レェ
+fgo:332,2,False,train,fgo:332 ドブルイニャ・ニキチッチ | fgo:419 ドブルイニャ・ニキチッチ
+fgo:345,2,False,train,fgo:345 クリームヒルト | fgo:446 クリームヒルト
+fgo:352,2,False,train,fgo:352 徐福 | fgo:420 徐福
+fgo:365,2,False,val,fgo:365 呼延灼 | fgo:447 呼延灼
+fgo:372,2,False,train,fgo:372 テノチティトラン | fgo:422 テノチティトラン
+fgo:376,2,False,train,fgo:376 ラーヴァ／ティアマト | fgo:450 ラーヴァ／ティアマト
+fgo:409,2,False,train,fgo:409 巌窟王　モンテ・クリスト | fgo:96 巌窟王
+fgo:433,2,False,train,fgo:433 ビショーネ | fgo:477 ビショーネ
+fgo:435,2,False,val,fgo:435 小野小町 | fgo:480 小野小町
+fgo:440,2,False,train,fgo:440 リリス | fgo:478 リリス
+fgo:91,2,False,train,fgo:91 両儀式 | fgo:92 両儀式
+starrail:13,2,False,train,starrail:13 ヘルタ | starrail:3285 マダム・ヘルタ
+starrail:4997,2,False,train,starrail:4997 銀狼LV.999 | starrail:710 銀狼
