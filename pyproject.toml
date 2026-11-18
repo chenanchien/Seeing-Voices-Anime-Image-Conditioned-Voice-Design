@@ -21,6 +21,7 @@ dependencies = [
 embed = [
     "torch>=2.4",
     "transformers>=4.45",
+    "sentencepiece>=0.2",  # SigLIP tokenizer
 ]
 
 [tool.uv]
