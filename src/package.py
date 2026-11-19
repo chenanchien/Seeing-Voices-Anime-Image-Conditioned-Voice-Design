@@ -3,8 +3,8 @@
 Each tar holds <game>/audio/... (cleaned FLAC at one sample rate), <game>/images/... (art
 re-encoded as WebP, long edge capped) and <game>/<game>_{characters,clips}.jsonl with paths
 rewritten relative to the package root. A game whose tar would pass --max-gb is split into
-_part1, _part2, ... Run it a few games at a time when disk is short. Also written: manifests.tar.gz (all manifests + voice_actors.csv), README.md
-and SHA256SUMS. Finished tars are skipped on rerun (a tar is written as .partial first).
+_part1, _part2, ... Run it a few games at a time when disk is short. Also written: manifests.tar.gz (all manifests + voice_actors.csv),
+embeddings.tar (data/embeddings, from src.embed), README.md and SHA256SUMS. Finished tars are skipped on rerun (a tar is written as .partial first).
 
     python -m src.package                       # all games, 24 kHz, images ≤1536 px
     python -m src.package --games azurlane wuwa zenless   # one batch
@@ -150,13 +150,17 @@ def run(games: list[str] | None, rate: int, max_side: int, max_gb: float) -> Non
             t.add(f, arcname=f"manifests/{f.name}")
         for f in sorted((ROOT / "reports").glob("*.md")):
             t.add(f, arcname=f"reports/{f.name}")
+    with tarfile.open(out / "embeddings.tar", "w") as t:
+        for f in sorted((ROOT / "data" / "embeddings").glob("*/*.npz")):
+            if not f.name.endswith((".partial.npz", ".tmp.npz")):
+                t.add(f, arcname=f"embeddings/{f.parent.name}/{f.name}")
     (out / "README.md").write_text(README.format(rate=rate, max_side=max_side, day=date.today()), encoding="utf-8")
     # batches may be uploaded and deleted in between, so keep sums of files no longer here
     sums_path = out / "SHA256SUMS"
     sums = dict(reversed(l.split("  ", 1)) for l in sums_path.read_text().splitlines()) if sums_path.exists() else {}
     tars = sorted(out.glob("*.tar")) + [out / "manifests.tar.gz"]
     for p in tars:
-        if p.name not in sums or p.name == "manifests.tar.gz" or p.stat().st_mtime > sums_path.stat().st_mtime:
+        if p.name not in sums or p.name in ("manifests.tar.gz", "embeddings.tar") or p.stat().st_mtime > sums_path.stat().st_mtime:
             sums[p.name] = sha256(p)
     sums_path.write_text("".join(f"{h}  {n}\n" for n, h in sorted(sums.items())))
     log.info("package at %s: %.1f GB in %d files here", out, sum(p.stat().st_size for p in tars) / 1e9, len(tars))
@@ -177,6 +181,9 @@ do not re-share, make the folder public, or upload it anywhere else.
 
 - `manifests.tar.gz`: the full pipeline manifests (all clips, including excluded ones with
   `exclude_reasons`), `voice_actors.csv` and the stats reports.
+- `embeddings.tar`: precomputed embeddings, extract into the same folder (gives
+  `embeddings/<model>/<game>.npz`; read with `src.dataset.load_embeddings`): clip-l14 and
+  siglip per image, wavlm-sv per usable clip.
 
 ## Layout after extraction
 
@@ -184,6 +191,7 @@ do not re-share, make the folder public, or upload it anywhere else.
     <game>/<game>_clips.jsonl        one usable clip per line; audio is a path
     <game>/audio/...                 mono FLAC, {rate} kHz, trimmed, -23 LUFS
     <game>/images/...                WebP, long edge at most {max_side} px
+    embeddings/<model>/<game>.npz    keys + float16 unit vectors
 
 Join clips to characters on `char_uid`, and characters to voice actors on `cv_uid`
 (`manifests/voice_actors.csv`). Field definitions: docs/dataset_report.md in the repo.
