@@ -8,9 +8,9 @@
 | azurlane | 857 | 2362 | 39615 | 38253 | 96.31 h | 100% / 0% / 0% / 0% |
 | bluearchive | 148 | 277 | 18607 | 14951 | 24.55 h | 100% / 0% / 0% / 0% |
 | fgo | 471 | 620 | 45829 | 31677 | 89.59 h | 61% / 35% / 0% / 4% |
-| genshin | 128 | 128 | 14035 | 13662 | 44.67 h | 64% / 34% / 0% / 2% |
+| genshin | 128 | 128 | 14035 | 13662 | 44.75 h | 64% / 34% / 0% / 2% |
 | girlsfrontline | 387 | 1100 | 12508 | 12114 | 19.82 h | 100% / 0% / 0% / 0% |
-| starrail | 89 | 92 | 4977 | 4756 | 10.31 h | 66% / 33% / 0% / 1% |
+| starrail | 89 | 92 | 4976 | 4755 | 10.52 h | 66% / 33% / 0% / 1% |
 | umamusume | 115 | 218 | 19635 | 19602 | 29.17 h | 100% / 0% / 0% / 0% |
 | wuwa | 58 | 68 | 1920 | 1642 | 4.36 h | 79% / 21% / 0% / 0% |
 | zenless | 57 | 57 | 8806 | 8361 | 5.92 h | 77% / 21% / 0% / 2% |
@@ -226,7 +226,7 @@ min 0, p25 75, median 122, p75 134, max 236
 | duplicate_audio | 6 | 6 |
 | non_japanese | 4 | 4 |
 
-Duration flags (not excluded): short (<1 s) 934, long (>15 s) 3457; of these, usable: short 782, long 3455.
+Duration flags (not excluded): short (<1 s) 937, long (>15 s) 3464; of these, usable: short 785, long 3462.
 
 ## genshin: characters with missing fields
 
@@ -300,7 +300,7 @@ min 0, p25 48, median 54, p75 63, max 129
 | duplicate_audio | 8 | 7 |
 | empty_audio | 1 | 1 |
 
-Duration flags (not excluded): short (<1 s) 192, long (>15 s) 855; of these, usable: short 141, long 853.
+Duration flags (not excluded): short (<1 s) 191, long (>15 s) 875; of these, usable: short 138, long 873.
 
 ## starrail: characters with missing fields
 

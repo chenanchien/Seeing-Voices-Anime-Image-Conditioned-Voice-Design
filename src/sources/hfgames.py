@@ -13,7 +13,7 @@ import html
 import json
 import logging
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import pyarrow.parquet as pq
@@ -279,12 +279,16 @@ def build(game: str, names: list[str] | None = None) -> None:
             "hf_speakers": speakers, "wiki_pages": m.get("pages", [m["name_zh"]]), "images": m["images"], "profile_texts": m["profile_texts"],
             "source_urls": m["source_urls"] + [f"https://huggingface.co/datasets/{cfg['hf_repo']}"],
         })
-        seen_text = set()
+        seen_text, seen_stem = set(), set()
+        vid_count = Counter(v["id"] for v in m.get("voice_lines", []))
         for v in m.get("voice_lines", []):  # official JP character voice-over (HoYoLAB)
             norm = next((k for k, rx in title_rules.items() if rx.search(v["title"])), "daily")
             seen_text.add(re.sub(r"\W", "", v["text"]))
+            clip_uid = f"{game}:hl:{m['id']}:{v['id']}"
+            if vid_count[v["id"]] > 1:  # HoYoLAB reuses voice ids across lines: add the file hash
+                clip_uid += ":" + v["url"].rsplit("/", 1)[1][:8]
             clips.append({
-                "clip_uid": f"{game}:hl:{m['id']}:{v['id']}", "char_uid": uid, "outfit_name": v.get("outfit"),
+                "clip_uid": clip_uid, "char_uid": uid, "outfit_name": v.get("outfit"),
                 "category": f"character_vo/{v['title']}", "category_norm": norm,
                 "voice_scope": "character_vo", "speaker": None, "condition": v.get("condition"), "is_legacy": False,
                 "text_ja": v["text"] or None, "text_zh": None, "text_source": "hoyolab" if v["text"] else None,
@@ -296,6 +300,9 @@ def build(game: str, names: list[str] | None = None) -> None:
         for r in rows:
             fname = r["source_path"].rsplit("/", 1)[1]
             stem = fname.rsplit(".", 1)[0]
+            if stem in seen_stem:
+                continue  # the HF set lists a few files twice
+            seen_stem.add(stem)
             scope = "character_vo" if vo_re.search(fname) else "story"
             if scope == "story" and not cfg.get("include_story", True):
                 continue

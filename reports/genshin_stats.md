@@ -2,7 +2,7 @@
 
 | game | characters | outfits (base+skins) | clips | usable clips | usable duration | female / male / other / unknown |
 |---|---|---|---|---|---|---|
-| genshin | 128 | 128 | 14035 | 13662 | 44.67 h | 64% / 34% / 0% / 2% |
+| genshin | 128 | 128 | 14035 | 13662 | 44.75 h | 64% / 34% / 0% / 2% |
 
 ## Clips by category_norm
 
@@ -12,7 +12,7 @@
 | bond | 2661 | 1 |
 | daily | 9034 | 8 |
 
-Text filled by Whisper ASR (text_source=asr): 6. Usable clips flagged is_legacy (pre-remake recording): 0.
+Text filled by Whisper ASR (text_source=asr): 7. Usable clips flagged is_legacy (pre-remake recording): 0.
 
 ## Usable clips per character
 
@@ -35,7 +35,7 @@ min 0, p25 75, median 122, p75 134, max 236
 | duplicate_audio | 6 | 6 |
 | non_japanese | 4 | 4 |
 
-Duration flags (not excluded): short (<1 s) 934, long (>15 s) 3457; of these, usable: short 782, long 3455.
+Duration flags (not excluded): short (<1 s) 937, long (>15 s) 3464; of these, usable: short 785, long 3462.
 
 ## name_ja shared by several characters (kept separate)
 

@@ -2,7 +2,7 @@
 
 | game | characters | outfits (base+skins) | clips | usable clips | usable duration | female / male / other / unknown |
 |---|---|---|---|---|---|---|
-| starrail | 89 | 92 | 4977 | 4756 | 10.31 h | 66% / 33% / 0% / 1% |
+| starrail | 89 | 92 | 4976 | 4755 | 10.52 h | 66% / 33% / 0% / 1% |
 
 ## Clips by category_norm
 
@@ -10,7 +10,7 @@
 |---|---|---|
 | battle | 1208 | 208 |
 | bond | 1014 | 0 |
-| daily | 2534 | 13 |
+| daily | 2533 | 13 |
 
 Text filled by Whisper ASR (text_source=asr): 15. Usable clips flagged is_legacy (pre-remake recording): 0.
 
@@ -36,7 +36,7 @@ min 0, p25 48, median 54, p75 63, max 129
 | duplicate_audio | 8 | 7 |
 | empty_audio | 1 | 1 |
 
-Duration flags (not excluded): short (<1 s) 192, long (>15 s) 855; of these, usable: short 141, long 853.
+Duration flags (not excluded): short (<1 s) 191, long (>15 s) 875; of these, usable: short 138, long 873.
 
 ## name_ja shared by several characters (kept separate)
 
