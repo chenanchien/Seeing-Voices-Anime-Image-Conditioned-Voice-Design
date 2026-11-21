@@ -24,5 +24,14 @@ embed = [
     "sentencepiece>=0.2",  # SigLIP tokenizer
 ]
 
+[dependency-groups]
+train = [
+    "torch>=2.4",
+    "scikit-learn>=1.5",
+    "tqdm>=4.66",
+    "pytest>=8.0",
+    "pandas>=3.1.1",
+]
+
 [tool.uv]
 package = false
