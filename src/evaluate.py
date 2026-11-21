@@ -93,21 +93,26 @@ class Features:
         return mlx_whisper.transcribe(wav, path_or_hf_repo=ASR_REPO, language="ja")["text"].strip()
 
     def get(self, paths: list[str]) -> dict[str, dict]:
-        todo = [p for p in dict.fromkeys(paths) if self._key(p) not in self.cache
-                or (self.asr and "asr" not in self.cache[self._key(p)])]
+        # embeddings one file at a time: padding a batch of mixed lengths changes the
+        # x-vector (cosine down to 0.75 against the unpadded embedding)
+        need = ["emb1", "f0"] + (["asr"] if self.asr else [])
+        todo = [p for p in dict.fromkeys(paths) if any(k not in self.cache.get(self._key(p), {}) for k in need)]
         with open(self.path, "a", encoding="utf-8") as f:
-            for s in range(0, len(todo), 16):
-                chunk = todo[s:s + 16]
-                wavs = [read_audio(p) for p in chunk]
-                embs = self.wavlm(wavs)
-                for p, w, e in zip(chunk, wavs, embs):
-                    r = {"key": self._key(p), "path": p, "emb": e.round(5).tolist(), "f0": self.f0(w)}
-                    if self.asr:
-                        r["asr"] = self.transcribe(w)
-                    self.cache[r["key"]] = r
-                    f.write(json.dumps(r, ensure_ascii=False) + "\n")
-                f.flush()
-                log.info("features %d/%d", min(s + 16, len(todo)), len(todo))
+            for i, p in enumerate(todo, 1):
+                r = {**self.cache.get(self._key(p), {}), "key": self._key(p), "path": p}
+                r.pop("emb", None)
+                w = read_audio(p)
+                if "emb1" not in r:
+                    r["emb1"] = self.wavlm([w])[0].round(5).tolist()
+                if "f0" not in r:
+                    r["f0"] = self.f0(w)
+                if self.asr and "asr" not in r:
+                    r["asr"] = self.transcribe(w)
+                self.cache[r["key"]] = r
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+                if i % 100 == 0 or i == len(todo):
+                    f.flush()
+                    log.info("features %d/%d", i, len(todo))
         return {p: self.cache[self._key(p)] for p in paths}
 
 
@@ -190,7 +195,7 @@ def score(outputs: list[dict], part: str, asr: bool) -> dict[str, dict]:
         by_method[o["method"]].append(o)
     results = {}
     for method, os_ in by_method.items():
-        E = np.stack([np.asarray(feats[o["path"]]["emb"], np.float32) for o in os_])
+        E = np.stack([np.asarray(feats[o["path"]]["emb1"], np.float32) for o in os_])
         S = E @ P.T
         t = np.array([idx[o["char_uid"]] for o in os_])
         matched = S[np.arange(len(t)), t]
