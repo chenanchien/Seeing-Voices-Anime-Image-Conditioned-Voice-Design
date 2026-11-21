@@ -23,6 +23,10 @@ embed = [
     "transformers>=4.45",
     "sentencepiece>=0.2",  # SigLIP tokenizer
 ]
+eval = [
+    "librosa>=0.10",   # F0 (pYIN)
+    "pykakasi>=2.3",   # kana readings for Japanese CER
+]
 
 [tool.uv]
 package = false
