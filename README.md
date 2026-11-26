@@ -16,6 +16,10 @@ src/clean/langid.py        Whisper small language check + ASR for missing text
 src/clean/finalize.py      merge quality fields, exclusion flags, checksum dedup
 src/clean/voice_actors.py  manifests/voice_actors.csv + cv_uid
 src/report.py              reports/<game>_stats.md, reports/summary.md
+src/embed.py               CLIP / SigLIP image and WavLM-SV speaker embeddings
+src/embed_qwen.py          per-clip Qwen3-TTS speaker embeddings (GPU) for M2
+src/extract_qwen_embeddings.py  Qwen character prototypes behind the baselines (Tianxiang)
+scripts/aws_qwen_spk.sh    download from Delta + run embed_qwen on an AWS GPU machine
 docs/sources/<game>.md     per-game source survey (URLs, structure, licence, size)
 data/                      gitignored: raw/<game>/, processed/<game>/
 ```
@@ -40,6 +44,41 @@ python -m src.report                     # all games
 ```
 
 Every step is idempotent and caches its work, so steps can be rerun at any time. Rerunning an adapter rewrites the clip manifest without quality fields; rerun `finalize` afterwards to restore them.
+
+## Qwen speaker embeddings (per clip)
+
+M2 trains on the TTS's own speaker embedding of every usable clip (about 155K), not only on the
+character prototypes in `data/embeddings/qwen-speaker-prototypes-10games-raw/`. `src.embed_qwen`
+uses the same recipe as the prototypes (Qwen3-TTS-12Hz-1.7B-Base at the pinned revision, BF16,
+one whole 24 kHz clip at a time, no padding / trimming / normalization) and keeps the native
+scale (mean L2 norm ~17). Output: `data/embeddings/qwen-spk/<game>.npz` with `keys` (clip_uid)
+and `emb` (float16, 2048-d, not normalized).
+
+Audio comes from two places, and both are needed: `data/processed/<game>/wav24k/` (files) and the
+share-package tars `seeing-voices_<game>.tar` (read in place, no unpacking). The script takes a
+clip from disk if the file is there, else from the tar.
+
+On Delta everything is under `/work/hdd/bjop/kchien` (read access for the team on request).
+Download it to another machine (asks for the NCSA password + Duo; rerun to resume):
+
+```bash
+rsync -a --partial <user>@login.delta.ncsa.illinois.edu:/work/hdd/bjop/kchien/seeing-voices/ ~/seeing-voices/
+rsync -a --partial <user>@login.delta.ncsa.illinois.edu:'/work/hdd/bjop/kchien/sv-share/seeing-voices_*.tar' ~/sv-share/
+```
+
+Then, on a machine with a CUDA GPU (one A10G is enough):
+
+```bash
+cd ~/seeing-voices
+uv venv -p 3.12 && . .venv/bin/activate && uv pip install qwen-tts soundfile
+python -m src.embed_qwen --list-missing --tars ~/sv-share   # every game must print "0 usable clips without audio"
+python -m src.embed_qwen --check --tars ~/sv-share          # cosine ~1 and norm ratio ~1.0 against the prototypes
+python -m src.embed_qwen --tars ~/sv-share                  # all clips; rerun to resume
+```
+
+`scripts/aws_qwen_spk.sh` does all of the above in one go (`DELTA_USER=<user> bash scripts/aws_qwen_spk.sh`).
+`--out` writes somewhere other than `data/embeddings/qwen-spk/`; finished games are skipped and a
+game in progress resumes from its last save (every 2,000 clips).
 
 ## Schema
 
